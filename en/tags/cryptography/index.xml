@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Cryptography on ❤️M.H.</title>
+        <link>https://Chang-mh.github.io/en/tags/cryptography/</link>
+        <description>Recent content in Cryptography on ❤️M.H.</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>M.H.</copyright>
+        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://Chang-mh.github.io/en/tags/cryptography/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>NTT Study Notes</title>
+        <link>https://Chang-mh.github.io/en/p/ntt/</link>
+        <pubDate>Thu, 11 Sep 2025 00:00:00 +0000</pubDate>
+        
+        <guid>https://Chang-mh.github.io/en/p/ntt/</guid>
+        <description>&lt;img src="https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT Study Notes" /&gt;&lt;h1 id=&#34;introduction&#34;&gt;Introduction
+&lt;/h1&gt;&lt;p&gt;In a previous article, we delved into the intricacies of the FFT algorithm. However, it has an inherent drawback: it operates in the complex number domain. The real and imaginary parts of the complex roots of unity are sine and cosine functions, respectively, involving extensive floating-point calculations. This results in significant computational load, and floating-point arithmetic can also introduce substantial errors.&lt;/p&gt;
+&lt;p&gt;So, can we change the operands to integers? The Number Theoretic Transform (NTT) emerged to answer this call.&lt;/p&gt;
+&lt;h1 id=&#34;the-transformation&#34;&gt;The Transformation
+&lt;/h1&gt;&lt;p&gt;The divide-and-conquer approach used by NTT is entirely identical to that used by FFT. This means NTT can be derived by making simple modifications to the FFT foundation.&lt;/p&gt;
+&lt;h2 id=&#34;primitive-root&#34;&gt;Primitive Root
+&lt;/h2&gt;&lt;p&gt;For a prime number $p$, its primitive root $g$ is an integer such that the sequence $g^1, g^2, \ldots, g^{p-1} \mod p$ generates the entire multiplicative group $Z_p^*$ (i.e., all elements in ${1, 2, \ldots, p-1}$).&lt;/p&gt;
+&lt;p&gt;In other words, the powers of $g$ modulo $p$ are all distinct and cover all integers from $1$ to $p-1$.&lt;/p&gt;
+&lt;p&gt;For example, the prime number $p = 7$.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check $g = 3$: $3^1 \equiv 3$, $3^2 \equiv 2$, $3^3 \equiv 6$, $3^4 \equiv 4$, $3^5 \equiv 5$, $3^6 \equiv 1 \mod 7$.&lt;/li&gt;
+&lt;li&gt;The sequence is ${3, 2, 6, 4, 5, 1}$, covering all numbers $1-6$. Thus, $3$ is a primitive root modulo $7$.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Analogous to the complex roots of unity, we can visualize the values of the primitive root as points on a circle. However, this circle has only a finite number of points, each representing a value in the residue system modulo $p$.&lt;/p&gt;
+&lt;p&gt;We define $\omega_n \equiv g^{(p-1)/n} \mod p$. This $\omega_n$ defined in this way satisfies the key properties of an $n$-th root of unity:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;$\omega_n^n \equiv (g^{(p-1)/n})^n \equiv g^{p-1} \equiv 1 \mod p$ (Fermat&amp;rsquo;s Little Theorem)&lt;/li&gt;
+&lt;li&gt;$\omega_n^{n/2} \equiv g^{(p-1)/2} \equiv -1 \mod p$ (Because $g^{(p-1)/2}$ is a square root of $1$, which can only be $\pm 1$ modulo $p$. By the definition of a primitive root, it cannot be $1$, so it must be $-1$.)&lt;/li&gt;
+&lt;li&gt;The sequence $\omega_n^0, \omega_n^1, \ldots, \omega_n^{n-1}$ consists of distinct elements.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Based on these three points, the &lt;strong&gt;Cancellation Lemma&lt;/strong&gt; and the &lt;strong&gt;Halving Lemma&lt;/strong&gt; crucial to FFT also hold:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cancellation Lemma&lt;/strong&gt;: $\omega_{dn}^{dk} = g^{\frac{p-1}{dn} \cdot dk} = g^{\frac{p-1}{n} \cdot k} = \omega_n^k$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Halving Lemma&lt;/strong&gt;: $\omega_n^{k + n/2} = \omega_n^k \cdot \omega_n^{n/2} = \omega_n^k \cdot (-1) = -\omega_n^k$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Perfect! We now have an element $\omega_n$ within the integer modulo $p$ domain that perfectly substitutes the complex root of unity.&lt;/p&gt;
+&lt;p&gt;With $\omega_n$, the implementation of NTT becomes almost identical to FFT. The process remains: &lt;strong&gt;Evaluation (NTT) → Pointwise Multiplication → Interpolation (Inverse NTT)&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Assume we have a polynomial $A(x)$ with coefficients modulo $p$ and a degree less than $n$ (where $n$ is a power of $2$, and $n \mid p-1$).&lt;/p&gt;
+&lt;h2 id=&#34;forward-transform-ntt&#34;&gt;Forward Transform (NTT)
+&lt;/h2&gt;&lt;p&gt;The recursive divide-and-conquer process is exactly the same as FFT:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Split the polynomial into two smaller polynomials based on even and odd indices: $A^{[0]}(x)$ and $A^{[1]}(x)$.&lt;/li&gt;
+&lt;li&gt;Recursively compute $\operatorname{NTT}(A^{[0]})$ and $\operatorname{NTT}(A^{[1]})$.&lt;/li&gt;
+&lt;li&gt;Combine the results:
+For $k = 0$ to $n/2 - 1$:
+$\operatorname{NTT}(A)[k] = (\operatorname{NTT}(A^{[0]})[k] + \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$
+$\operatorname{NTT}(A)[k + n/2] = (\operatorname{NTT}(A^{[0]})[k] - \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The addition, multiplication, and modulo operations here are all performed within the integer modulo $p$ domain. There are no floating-point numbers and no precision errors!&lt;/p&gt;
+&lt;h2 id=&#34;inverse-transform-intt&#34;&gt;Inverse Transform (INTT)
+&lt;/h2&gt;&lt;p&gt;The differences between the inverse NTT (INTT) and NTT are only:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Use $\omega_n^{-1} \mod p$ (the modular multiplicative inverse of $\omega_n$) instead of $\omega_n$.&lt;/li&gt;
+&lt;li&gt;Multiply the final result by $n^{-1} \mod p$ (the modular multiplicative inverse of $n$).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The formula for INTT is:
+$\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \omega_n^{-kj} \right) \mod p$&lt;/p&gt;
+&lt;p&gt;In practical code, &lt;strong&gt;iterative (non-recursive)&lt;/strong&gt; butterfly operations are usually used to implement NTT/INTT for higher efficiency.&lt;/p&gt;
+&lt;h2 id=&#34;modulus-p&#34;&gt;Modulus $p$
+&lt;/h2&gt;&lt;p&gt;NTT has a crucial constraint: &lt;strong&gt;the transformation length $n$ must be a divisor of $p-1$&lt;/strong&gt;. This is because we need $\omega_n = g^{(p-1)/n}$ to be an integer, which requires that $n$ divides $p-1$.&lt;/p&gt;
+&lt;p&gt;The common practice is to choose primes of special forms where $p-1$ contains a very large power-of-$2$ factor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Common NTT Moduli&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;$p = 469762049 = 7 \cdot 2^{26} + 1$, $g = 3$&lt;/p&gt;
+&lt;p&gt;$p = 998244353 = 7\cdot17 \cdot 2^{23} + 1$, $g = 3$ (Note: The original factorization $119 \cdot 2^{23} + 1$ is also correct as 119=7*17)&lt;/p&gt;
+&lt;p&gt;$p = 1004535809 = 479 \cdot 2^{21} + 1$, $g = 3$&lt;/p&gt;
+&lt;p&gt;If the values in the problem are very large, &lt;strong&gt;arbitrary modulus NTT&lt;/strong&gt; (which combines results from multiple NTTs using different moduli via the Chinese Remainder Theorem) might be necessary.&lt;/p&gt;
+&lt;h1 id=&#34;summary&#34;&gt;Summary
+&lt;/h1&gt;&lt;p&gt;Assuming we want to compute $A(x) \times B(x) \mod p$, with coefficients in $[0, p-1]$.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Zero-padding&lt;/strong&gt;: Determine the length $N \geq \operatorname{len}(A) + \operatorname{len}(B) - 1$, ensuring $N$ is a power of $2$ and that $N \mid (p-1)$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Evaluation (NTT)&lt;/strong&gt;: Compute $\vec{A&amp;rsquo;} = \operatorname{NTT}(\vec{A})$, $\vec{B&amp;rsquo;} = \operatorname{NTT}(\vec{B})$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pointwise Multiplication&lt;/strong&gt;: Compute $\vec{C&amp;rsquo;}[k] = \vec{A&amp;rsquo;}[k] \cdot \vec{B&amp;rsquo;}[k] \mod p$ for $k=0,1,\ldots,N-1$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Interpolation (INTT)&lt;/strong&gt;: Compute $\vec{C} = \operatorname{INTT}(\vec{C&amp;rsquo;})$. The result $\vec{C}$ is the coefficient vector of $A(x) \times B(x) \mod p$.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The Number Theoretic Transform (NTT) perfectly adapts the ideas of FFT to the integer modulo domain. By substituting the &lt;strong&gt;primitive root&lt;/strong&gt; for the &lt;strong&gt;complex root of unity&lt;/strong&gt; and &lt;strong&gt;modular arithmetic&lt;/strong&gt; for complex arithmetic, it retains the $O(n \log n)$ computational efficiency while providing absolutely accurate results and faster computation speed. This makes it the algorithm of choice for handling large integer multiplication and polynomial convolution in competitive programming and engineering applications.&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

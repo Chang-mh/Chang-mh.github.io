@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="这是一个副标题">
+<title>NTT学习笔记</title>
+
+<link rel='canonical' href='https://Chang-mh.github.io/p/ntt/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="NTT学习笔记">
+<meta property='og:description' content="这是一个副标题">
+<meta property='og:url' content='https://Chang-mh.github.io/p/ntt/'>
+<meta property='og:site_name' content='❤️M.H.'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='数学基础' /><meta property='article:tag' content='密码学' /><meta property='article:published_time' content='2025-09-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-09-11T00:00:00&#43;00:00'/><meta property='og:image' content='https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg' />
+<meta name="twitter:title" content="NTT学习笔记">
+<meta name="twitter:description" content="这是一个副标题"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/nazime_hu_87c03dc0523f28a2.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">❤️M.H.</a></h1>
+            <h2 class="site-description">一个安静的小站</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://Chang-mh.github.io/en/" >English</option>
+                                
+                                    <option value="https://Chang-mh.github.io/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#变换">变换</a>
+      <ol>
+        <li><a href="#原根">原根</a></li>
+        <li><a href="#正变换ntt">正变换（NTT）</a></li>
+        <li><a href="#逆变换intt">逆变换（INTT）</a></li>
+        <li><a href="#模数-p">模数 $p$</a></li>
+      </ol>
+    </li>
+    <li><a href="#小结">小结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/ntt/">
+                <img src="/p/ntt/helena-hertz-wWZzXlDpMog-unsplash_hu_e5aaa5f0b7bd07e9.jpg"
+                        srcset="/p/ntt/helena-hertz-wWZzXlDpMog-unsplash_hu_e5aaa5f0b7bd07e9.jpg 800w, /p/ntt/helena-hertz-wWZzXlDpMog-unsplash_hu_c99ba9c80ceee4b3.jpg 1600w"
+                        width="800" 
+                        height="600" 
+                        loading="lazy"
+                        alt="Featured image of post NTT学习笔记" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" >
+                学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/ntt/">NTT学习笔记</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            这是一个副标题
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 11, 2025</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+        <footer class="article-translations">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+            <div>
+                
+                    <a href="https://Chang-mh.github.io/en/p/ntt/" class="link">English</a>
+                
+            </div>
+        </footer>
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="引言">引言
+</h1><p>在之前的一篇文章里，我们详细了解了精妙的FFT算法。但它有一个与生俱来的缺点：在复数域上。单位复根的实部和虚部分别是一个正弦及余弦函数，有大量浮点数计算，计算量很大且浮点数运算也会产生较大的误差。</p>
+<p>所以我们可不可以把操作对象变成整数呢？快速数论变换（NTT）应运而生。</p>
+<h1 id="变换">变换
+</h1><p>NTT使用的分治办法，与FTT使用的分治办法完全一致。这意味着，只需在FTT的基础上进行简单修改，即可得到NTT。</p>
+<h2 id="原根">原根
+</h2><p>对于一个素数 $p$，它的原根 $g$ 是一个整数，使得 $g^1, g^2, \ldots, g^{p-1} \mod p$ 这个序列，能够生成整个乘法群 $Z_p^*$（即 ${1, 2, \ldots, p-1}$ 中的所有元素）。</p>
+<p>换句话说，$g$ 的幂模 $p$ 的结果两两不同，且覆盖了 $1$ 到 $p-1$ 的所有整数。</p>
+<p>例如，素数 $p = 7$。</p>
+<ul>
+<li>检查 $g = 3$：$3^1 \equiv 3$, $3^2 \equiv 2$, $3^3 \equiv 6$, $3^4 \equiv 4$, $3^5 \equiv 5$, $3^6 \equiv 1 \mod 7$。</li>
+<li>序列是 ${3, 2, 6, 4, 5, 1}$，覆盖了 $1-6$ 的所有数。所以 $3$ 是 $7$ 的一个原根。</li>
+</ul>
+<p>仿照单位复数根的形式，也将原根的取值看成一个圆，不过这个圆上只有有限个点，每个点表达的是模数的剩余系中的值。</p>
+<p>我们令 $\omega_n \equiv g^{(p-1)/n} \mod p$​。这样定义的 $\omega_n$ 满足 $n$ 次单位根的性质：</p>
+<ol>
+<li>$\omega_n^n \equiv (g^{(p-1)/n})^n \equiv g^{p-1} \equiv 1 \mod p$ （费马小定理）</li>
+<li>$\omega_n^{n/2} \equiv g^{(p-1)/2} \equiv -1 \mod p$ （因为 $g^{(p-1)/2}$ 是 $1$ 的平方根，只能是 $\pm 1$，而根据原根定义，它不能是 $1$，所以是 $-1$）</li>
+<li>序列 $\omega_n^0, \omega_n^1, \ldots, \omega_n^{n-1}$ 是互不相同的。</li>
+</ol>
+<p>基于这三点，FFT中的<strong>消去引理</strong>和<strong>折半引理</strong>同样成立：</p>
+<ul>
+<li><strong>消去引理</strong>：$\omega_{dn}^{dk} = g^{\frac{p-1}{dn} \cdot dk} = g^{\frac{p-1}{n} \cdot k} = \omega_n^k$</li>
+<li><strong>折半引理</strong>：$\omega_n^{k + n/2} = \omega_n^k \cdot \omega_n^{n/2} = \omega_n^k \cdot (-1) = -\omega_n^k$</li>
+</ul>
+<p>完美！现在我们有了一个在整数模 $p$ 域中完美替代复数单位根的元素 $\omega_n$。</p>
+<p>有了 $\omega_n$，NTT的实现就和FFT几乎一模一样了。过程依然是：<strong>求值（NTT）→ 点乘 → 插值（逆NTT）</strong>。</p>
+<p>假设我们有一个多项式 $A(x)$，系数在模 $p$ 下，次数小于 $n$（$n$ 是 $2$ 的幂，且 $n \mid p-1$）。</p>
+<h2 id="正变换ntt">正变换（NTT）
+</h2><p>递归分治的过程与FFT完全一致：</p>
+<ol>
+<li>
+<p>将多项式按奇偶索引分成两个子多项式：$A^{[0]}(x)$ 和 $A^{[1]}(x)$。</p>
+</li>
+<li>
+<p>递归计算 $\operatorname{NTT}(A^{[0]})$ 和 $\operatorname{NTT}(A^{[1]})$。</p>
+</li>
+<li>
+<p>合并结果：</p>
+<p>对于 $k = 0$ 到 $n/2 - 1$：</p>
+<p>$\operatorname{NTT}(A)[k] = (\operatorname{NTT}(A^{[0]})[k] + \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$</p>
+<p>$\operatorname{NTT}(A)[k + n/2] = (\operatorname{NTT}(A^{[0]})[k] - \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$</p>
+</li>
+</ol>
+<p><strong>注意</strong>：这里的加法、乘法、取模都是在模 $p$ 的整数域中进行的，没有浮点数，没有精度误差！</p>
+<h2 id="逆变换intt">逆变换（INTT）
+</h2><p>逆NTT（INTT）与NTT的差别仅在于：</p>
+<ol>
+<li>使用 $\omega_n^{-1} \mod p$ （即 $\omega_n$ 的模逆元）代替 $\omega_n$。</li>
+<li>最后结果需要乘以 $n^{-1} \mod p$ （即 $n$ 的模逆元）。</li>
+</ol>
+<p>INTT的公式如下：
+$\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \omega_n^{-kj} \right) \mod p$</p>
+<p>在实际代码中，我们通常使用<strong>迭代（非递归）</strong> 的蝴蝶操作来实现NTT/INTT，以获得更高的效率。</p>
+<h2 id="模数-p">模数 $p$
+</h2><p>NTT有一个关键限制：<strong>变换长度 $n$ 必须是 $p-1$ 的因子</strong>。因为我们需要 $\omega_n = g^{(p-1)/n}$ 是一个整数，这就要求 $n$ 必须能整除 $p-1$。</p>
+<p>常见的做法是选择一些形式特殊的素数，使得 $p-1$ 包含一个非常大的 $2$ 的幂因子。</p>
+<p><strong>常见NTT模数</strong>：</p>
+<p>$p = 469762049 = 7 \cdot 2^{26} + 1$，$g = 3$</p>
+<p>$p = 998244353 = 7\cdot17 \cdot 2^{23} + 1$，$g = 3$</p>
+<p>$p = 1004535809 = 479 \cdot 2^{21} + 1$，$g = 3$</p>
+<p>如果问题中的数值非常大，可能需要使用<strong>任意模数NTT</strong>（通过CRT合并多个不同模数NTT的结果）。</p>
+<h1 id="小结">小结
+</h1><p>假设我们计算 $A(x) \times B(x) \mod p$，系数在 $[0, p-1]$ 内。</p>
+<ol>
+<li><strong>补零</strong>：确定长度 $N \geq \operatorname{len}(A) + \operatorname{len}(B) - 1$，且 $N$ 是 $2$ 的幂，并且 $N \mid (p-1)$。</li>
+<li><strong>求值（NTT）</strong>：计算 $\vec{A&rsquo;} = \operatorname{NTT}(\vec{A})$，$\vec{B&rsquo;} = \operatorname{NTT}(\vec{B})$。</li>
+<li><strong>点乘</strong>：计算 $\vec{C&rsquo;}[k] = \vec{A&rsquo;}[k] \cdot \vec{B&rsquo;}[k] \mod p$，$k=0,1,\ldots,N-1$。</li>
+<li><strong>插值（INTT）</strong>：计算 $\vec{C} = \operatorname{INTT}(\vec{C&rsquo;})$。结果 $\vec{C}$ 就是 $A(x) \times B(x) \mod p$ 的系数向量。</li>
+</ol>
+<p>数论变换（NTT）完美地将FFT的思想移植到了整数模域中。它通过用<strong>原根</strong>替代<strong>单位根</strong>，用<strong>模运算</strong>替代复数运算，在保留了 $O(n \log n)$ 高效计算能力的同时，提供了绝对精确的结果和更快的速度，使其成为算法竞赛和工程应用中处理大规模整数、多项式卷积问题的首选利器。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/">数学基础</a>
+        
+            <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">密码学</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>❤️M.H. All rights reserved</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/fft/">
+        
+        
+            <div class="article-image">
+                <img src="/p/fft/pexels-lum3n-44775-167682.3ce5325da6e379236b082807f37e1f4c_hu_bd8b2abc46d34762.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post FFT学习笔记"
+                        data-key="fft" 
+                        data-hash="md5-POUyXabjeSNrCCgH834fTA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">FFT学习笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"avatar":false,"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo"],"lang":"zh-CN","locale":{"admin":"管理员","placeholder":"留下你的评论..."},"pageview":true,"requiredMeta":["name"],"serverURL":"https://mh-lhyduhkry-chang-mhs-projects.vercel.app"});
+</script>
+
+    
+
+    <footer class="footer">
+    <div class="footer__inner">        
+        <div class="copyright">
+            
+                <span>© 2025 ❤️M.H.</span>
+                <span class="footer-divider">·</span>
+                <span>静心写作，分享所知</span>
+            
+        </div>
+    </div>
+</footer>
+
+<style>
+.footer {
+    margin-top: 4rem;
+    padding: 2rem 0 1.5rem;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.footer-divider {
+    margin: 0 0.5rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+    .footer-top-border {
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            var(--border-color-dark) 20%, 
+            var(--border-color-dark) 80%, 
+            transparent 100%);
+    }
+}
+</style>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

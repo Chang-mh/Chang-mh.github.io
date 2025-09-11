@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Study on ❤️M.H.</title>
+        <link>https://Chang-mh.github.io/en/categories/study/</link>
+        <description>Recent content in Study on ❤️M.H.</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>M.H.</copyright>
+        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://Chang-mh.github.io/en/categories/study/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>NTT Study Notes</title>
+        <link>https://Chang-mh.github.io/en/p/ntt/</link>
+        <pubDate>Thu, 11 Sep 2025 00:00:00 +0000</pubDate>
+        
+        <guid>https://Chang-mh.github.io/en/p/ntt/</guid>
+        <description>&lt;img src="https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT Study Notes" /&gt;&lt;h1 id=&#34;introduction&#34;&gt;Introduction
+&lt;/h1&gt;&lt;p&gt;In a previous article, we delved into the intricacies of the FFT algorithm. However, it has an inherent drawback: it operates in the complex number domain. The real and imaginary parts of the complex roots of unity are sine and cosine functions, respectively, involving extensive floating-point calculations. This results in significant computational load, and floating-point arithmetic can also introduce substantial errors.&lt;/p&gt;
+&lt;p&gt;So, can we change the operands to integers? The Number Theoretic Transform (NTT) emerged to answer this call.&lt;/p&gt;
+&lt;h1 id=&#34;the-transformation&#34;&gt;The Transformation
+&lt;/h1&gt;&lt;p&gt;The divide-and-conquer approach used by NTT is entirely identical to that used by FFT. This means NTT can be derived by making simple modifications to the FFT foundation.&lt;/p&gt;
+&lt;h2 id=&#34;primitive-root&#34;&gt;Primitive Root
+&lt;/h2&gt;&lt;p&gt;For a prime number $p$, its primitive root $g$ is an integer such that the sequence $g^1, g^2, \ldots, g^{p-1} \mod p$ generates the entire multiplicative group $Z_p^*$ (i.e., all elements in ${1, 2, \ldots, p-1}$).&lt;/p&gt;
+&lt;p&gt;In other words, the powers of $g$ modulo $p$ are all distinct and cover all integers from $1$ to $p-1$.&lt;/p&gt;
+&lt;p&gt;For example, the prime number $p = 7$.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Check $g = 3$: $3^1 \equiv 3$, $3^2 \equiv 2$, $3^3 \equiv 6$, $3^4 \equiv 4$, $3^5 \equiv 5$, $3^6 \equiv 1 \mod 7$.&lt;/li&gt;
+&lt;li&gt;The sequence is ${3, 2, 6, 4, 5, 1}$, covering all numbers $1-6$. Thus, $3$ is a primitive root modulo $7$.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Analogous to the complex roots of unity, we can visualize the values of the primitive root as points on a circle. However, this circle has only a finite number of points, each representing a value in the residue system modulo $p$.&lt;/p&gt;
+&lt;p&gt;We define $\omega_n \equiv g^{(p-1)/n} \mod p$. This $\omega_n$ defined in this way satisfies the key properties of an $n$-th root of unity:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;$\omega_n^n \equiv (g^{(p-1)/n})^n \equiv g^{p-1} \equiv 1 \mod p$ (Fermat&amp;rsquo;s Little Theorem)&lt;/li&gt;
+&lt;li&gt;$\omega_n^{n/2} \equiv g^{(p-1)/2} \equiv -1 \mod p$ (Because $g^{(p-1)/2}$ is a square root of $1$, which can only be $\pm 1$ modulo $p$. By the definition of a primitive root, it cannot be $1$, so it must be $-1$.)&lt;/li&gt;
+&lt;li&gt;The sequence $\omega_n^0, \omega_n^1, \ldots, \omega_n^{n-1}$ consists of distinct elements.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Based on these three points, the &lt;strong&gt;Cancellation Lemma&lt;/strong&gt; and the &lt;strong&gt;Halving Lemma&lt;/strong&gt; crucial to FFT also hold:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cancellation Lemma&lt;/strong&gt;: $\omega_{dn}^{dk} = g^{\frac{p-1}{dn} \cdot dk} = g^{\frac{p-1}{n} \cdot k} = \omega_n^k$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Halving Lemma&lt;/strong&gt;: $\omega_n^{k + n/2} = \omega_n^k \cdot \omega_n^{n/2} = \omega_n^k \cdot (-1) = -\omega_n^k$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Perfect! We now have an element $\omega_n$ within the integer modulo $p$ domain that perfectly substitutes the complex root of unity.&lt;/p&gt;
+&lt;p&gt;With $\omega_n$, the implementation of NTT becomes almost identical to FFT. The process remains: &lt;strong&gt;Evaluation (NTT) → Pointwise Multiplication → Interpolation (Inverse NTT)&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Assume we have a polynomial $A(x)$ with coefficients modulo $p$ and a degree less than $n$ (where $n$ is a power of $2$, and $n \mid p-1$).&lt;/p&gt;
+&lt;h2 id=&#34;forward-transform-ntt&#34;&gt;Forward Transform (NTT)
+&lt;/h2&gt;&lt;p&gt;The recursive divide-and-conquer process is exactly the same as FFT:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Split the polynomial into two smaller polynomials based on even and odd indices: $A^{[0]}(x)$ and $A^{[1]}(x)$.&lt;/li&gt;
+&lt;li&gt;Recursively compute $\operatorname{NTT}(A^{[0]})$ and $\operatorname{NTT}(A^{[1]})$.&lt;/li&gt;
+&lt;li&gt;Combine the results:
+For $k = 0$ to $n/2 - 1$:
+$\operatorname{NTT}(A)[k] = (\operatorname{NTT}(A^{[0]})[k] + \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$
+$\operatorname{NTT}(A)[k + n/2] = (\operatorname{NTT}(A^{[0]})[k] - \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The addition, multiplication, and modulo operations here are all performed within the integer modulo $p$ domain. There are no floating-point numbers and no precision errors!&lt;/p&gt;
+&lt;h2 id=&#34;inverse-transform-intt&#34;&gt;Inverse Transform (INTT)
+&lt;/h2&gt;&lt;p&gt;The differences between the inverse NTT (INTT) and NTT are only:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Use $\omega_n^{-1} \mod p$ (the modular multiplicative inverse of $\omega_n$) instead of $\omega_n$.&lt;/li&gt;
+&lt;li&gt;Multiply the final result by $n^{-1} \mod p$ (the modular multiplicative inverse of $n$).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The formula for INTT is:
+$\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \omega_n^{-kj} \right) \mod p$&lt;/p&gt;
+&lt;p&gt;In practical code, &lt;strong&gt;iterative (non-recursive)&lt;/strong&gt; butterfly operations are usually used to implement NTT/INTT for higher efficiency.&lt;/p&gt;
+&lt;h2 id=&#34;modulus-p&#34;&gt;Modulus $p$
+&lt;/h2&gt;&lt;p&gt;NTT has a crucial constraint: &lt;strong&gt;the transformation length $n$ must be a divisor of $p-1$&lt;/strong&gt;. This is because we need $\omega_n = g^{(p-1)/n}$ to be an integer, which requires that $n$ divides $p-1$.&lt;/p&gt;
+&lt;p&gt;The common practice is to choose primes of special forms where $p-1$ contains a very large power-of-$2$ factor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Common NTT Moduli&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;$p = 469762049 = 7 \cdot 2^{26} + 1$, $g = 3$&lt;/p&gt;
+&lt;p&gt;$p = 998244353 = 7\cdot17 \cdot 2^{23} + 1$, $g = 3$ (Note: The original factorization $119 \cdot 2^{23} + 1$ is also correct as 119=7*17)&lt;/p&gt;
+&lt;p&gt;$p = 1004535809 = 479 \cdot 2^{21} + 1$, $g = 3$&lt;/p&gt;
+&lt;p&gt;If the values in the problem are very large, &lt;strong&gt;arbitrary modulus NTT&lt;/strong&gt; (which combines results from multiple NTTs using different moduli via the Chinese Remainder Theorem) might be necessary.&lt;/p&gt;
+&lt;h1 id=&#34;summary&#34;&gt;Summary
+&lt;/h1&gt;&lt;p&gt;Assuming we want to compute $A(x) \times B(x) \mod p$, with coefficients in $[0, p-1]$.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Zero-padding&lt;/strong&gt;: Determine the length $N \geq \operatorname{len}(A) + \operatorname{len}(B) - 1$, ensuring $N$ is a power of $2$ and that $N \mid (p-1)$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Evaluation (NTT)&lt;/strong&gt;: Compute $\vec{A&amp;rsquo;} = \operatorname{NTT}(\vec{A})$, $\vec{B&amp;rsquo;} = \operatorname{NTT}(\vec{B})$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pointwise Multiplication&lt;/strong&gt;: Compute $\vec{C&amp;rsquo;}[k] = \vec{A&amp;rsquo;}[k] \cdot \vec{B&amp;rsquo;}[k] \mod p$ for $k=0,1,\ldots,N-1$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Interpolation (INTT)&lt;/strong&gt;: Compute $\vec{C} = \operatorname{INTT}(\vec{C&amp;rsquo;})$. The result $\vec{C}$ is the coefficient vector of $A(x) \times B(x) \mod p$.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The Number Theoretic Transform (NTT) perfectly adapts the ideas of FFT to the integer modulo domain. By substituting the &lt;strong&gt;primitive root&lt;/strong&gt; for the &lt;strong&gt;complex root of unity&lt;/strong&gt; and &lt;strong&gt;modular arithmetic&lt;/strong&gt; for complex arithmetic, it retains the $O(n \log n)$ computational efficiency while providing absolutely accurate results and faster computation speed. This makes it the algorithm of choice for handling large integer multiplication and polynomial convolution in competitive programming and engineering applications.&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>FFT Study Notes</title>
+        <link>https://Chang-mh.github.io/en/p/fft/</link>
+        <pubDate>Tue, 09 Sep 2025 00:00:00 +0000</pubDate>
+        
+        <guid>https://Chang-mh.github.io/en/p/fft/</guid>
+        <description>&lt;img src="https://Chang-mh.github.io/p/fft/pexels-lum3n-44775-167682.jpg" alt="Featured image of post FFT Study Notes" /&gt;&lt;h1 id=&#34;introduction&#34;&gt;Introduction
+&lt;/h1&gt;&lt;p&gt;Suppose we have two polynomials:&lt;/p&gt;
+&lt;p&gt;\( A(x) = a_0 + a_1x + a_2x^2 + ... + a_{n-1}x^{n-1} \)&lt;/p&gt;
+&lt;p&gt;\( B(x) = b_0 + b_1x + b_2x^2 + ... + b_{m-1}x^{m-1} \)&lt;/p&gt;
+&lt;p&gt;We want to compute their product:&lt;/p&gt;
+&lt;p&gt;\( C(x) = A(x) \times B(x) = c_0 + c_1x + c_2x^2 + ... + c_{(n+m-2)}x^{(n+m-2)} \)&lt;/p&gt;
+&lt;p&gt;where each coefficient \( c_k = \sum_{i=0}^{k} a_i b_{k-i} \).&lt;/p&gt;
+&lt;p&gt;If we compute this &lt;strong&gt;directly (convolution)&lt;/strong&gt;, we need approximately \( n \times m \) multiplications and additions. If both \( n \) and \( m \) are large, this \( O(n^2) \) complexity becomes very slow.&lt;/p&gt;
+&lt;p&gt;The Fast Fourier Transform (FFT) provides a way to reduce the complexity to \( O(n \log n) \).&lt;/p&gt;
+&lt;h1 id=&#34;the-transformation&#34;&gt;The Transformation
+&lt;/h1&gt;&lt;p&gt;The standard representation of a polynomial is the &lt;strong&gt;Coefficient Representation&lt;/strong&gt;, which is \( (a_0, a_1, ..., a_{n-1}) \) as used above. There is another equivalent representation called the &lt;strong&gt;Point-Value Representation&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;It is well-known that two points uniquely determine a line. What about three points, four points, or even more? It has been proven that a polynomial of degree \( n-1 \) can be &lt;strong&gt;uniquely determined&lt;/strong&gt; by its values at \( n \) distinct points \( (x_0, x_1, ..., x_{n-1}) \), which we can take as given.&lt;/p&gt;
+&lt;p&gt;Polynomial multiplication in point-value representation becomes extremely simple:
+Assume we have polynomials \( A(x) \) and \( B(x) \).&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Take \( N \) points for \( A(x) \): \( (x_k, A(x_k)) \), \( k=0,1,...,N-1 \)&lt;/li&gt;
+&lt;li&gt;Take the &lt;strong&gt;same&lt;/strong&gt; \( N \) points for \( B(x) \): \( (x_k, B(x_k)) \), \( k=0,1,...,N-1 \)
+&lt;em&gt;Note: Here, \( N \) must be at least \(deg(A) + deg(B) + 1 \) (or more precisely, at least \(n + m - 1\)) to uniquely determine the product polynomial \( C(x) \).&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Then the values of the product \( C(x) = A(x) \times B(x) \) at these \( N \) points are:
+\( (x_k, C(x_k)) = (x_k, A(x_k) \times B(x_k)) \), \( k=0,1,...,N-1 \)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Pointwise multiplication now only takes \( O(N) \) time! This is much better than \( O(N^2) \).&lt;/p&gt;
+&lt;p&gt;Thus, the strategy for polynomial multiplication becomes: &lt;strong&gt;Coefficient Representation → Point-Value Representation → Pointwise Multiplication → Coefficient Representation&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Evaluation&lt;/strong&gt;: Convert \( A(x) \) and \( B(x) \) from coefficient form to point-value form.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pointwise Multiplication&lt;/strong&gt;: Compute \( C(x_k) = A(x_k) \times B(x_k) \).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Interpolation&lt;/strong&gt;: Convert \( C(x) \) from point-value form back to coefficient form.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The core question now is: &lt;strong&gt;How can we quickly convert between coefficient representation and point-value representation?&lt;/strong&gt;
+If we choose any \( N \) points arbitrarily, the complexity of the first step (evaluation) and the third step (interpolation) will still be \( O(N^2) \) (since computing each \( A(x_k) \) takes \( O(N) \) time).&lt;/p&gt;
+&lt;p&gt;The ingenuity of the FFT lies in its &lt;strong&gt;careful selection of a special set of points&lt;/strong&gt; and the use of a &lt;strong&gt;divide-and-conquer strategy&lt;/strong&gt; to optimize both the evaluation and interpolation processes to \( O(N \log N) \).&lt;/p&gt;
+&lt;h2 id=&#34;dft-and-roots-of-unity&#34;&gt;DFT and Roots of Unity
+&lt;/h2&gt;&lt;p&gt;The special set of points chosen by the FFT are the &lt;strong&gt;Roots of Unity&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;Discrete Fourier Transform (DFT)&lt;/strong&gt; is the evaluation of a polynomial \( A(x) \) at the \( N \) &lt;strong&gt;N-th roots of unity&lt;/strong&gt; \( \omega_N^0, \omega_N^1, ..., \omega_N^{N-1} \). The resulting values \( (A(\omega_N^0), A(\omega_N^1), ..., A(\omega_N^{N-1})) \) are its DFT coefficients.&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;N-th roots of unity&lt;/strong&gt; are the \( N \) complex solutions to the equation \( z^N = 1 \). They can be expressed as:
+\( \omega_N^k = e^{2\pi i k / N} = \cos(\frac{2\pi k}{N}) + i \sin(\frac{2\pi k}{N}) \), where \( k = 0, 1, ..., N-1 \), and \( i \) is the imaginary unit.&lt;/p&gt;
+&lt;p&gt;The roots of unity have several &lt;strong&gt;crucial properties&lt;/strong&gt; that form the basis of the FFT&amp;rsquo;s divide-and-conquer approach:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Cancellation Lemma&lt;/strong&gt;: \( \omega_{2N}^{2k} = \omega_N^k \)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Halving Lemma&lt;/strong&gt;: If \( N \) is even, then \( \omega_N^{k + N/2} = -\omega_N^k \)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Summation Lemma&lt;/strong&gt;: This will be used later in the inverse transform.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;the-magic-of-divide-and-conquer&#34;&gt;The Magic of Divide-and-Conquer
+&lt;/h2&gt;&lt;p&gt;The FFT is an algorithm for computing the DFT quickly. We assume \( N \) is a power of 2 (if not, we can pad with zeros to the nearest power of 2).&lt;/p&gt;
+&lt;p&gt;We split the polynomial \( A(x) \) into two new polynomials of half the size based on even and odd indices:&lt;/p&gt;
+&lt;p&gt;\( A^{[0]}(x) = a_0 + a_2x + a_4x^2 + ... + a_{N-2}x^{N/2 - 1} \) (even-indexed coefficients)&lt;/p&gt;
+&lt;p&gt;\( A^{[1]}(x) = a_1 + a_3x + a_5x^2 + ... + a_{N-1}x^{N/2 - 1} \) (odd-indexed coefficients)&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s easy to see that the original polynomial can be expressed as:
+\( A(x) = A^{[0]}(x^2) + x A^{[1]}(x^2) \)&lt;/p&gt;
+&lt;p&gt;Now, our problem transforms from &amp;ldquo;evaluate \( A(x) \) at \( N \) points \( (\omega_N^0, \omega_N^1, ..., \omega_N^{N-1}) \)&amp;rdquo; to &amp;ldquo;evaluate \( A^{[0]}(x) \) and \( A^{[1]}(x) \) at \( N/2 \) points \( ((\omega_N^0)^2, (\omega_N^1)^2, ..., (\omega_N^{N-1})^2) \)&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;According to the &lt;strong&gt;Cancellation Lemma&lt;/strong&gt;: \( (\omega_N^k)^2 = \omega_{N/2}^k \)
+Furthermore, \( (\omega_N^{k + N/2})^2 = (\omega_N^k \omega_N^{N/2})^2 = (\omega_N^k \cdot -1)^2 = (\omega_N^k)^2 = \omega_{N/2}^k \)&lt;/p&gt;
+&lt;p&gt;This means that the \( N \) squared points we need to evaluate actually consist of only \( N/2 \) &lt;strong&gt;distinct values&lt;/strong&gt;: \( \omega_{N/2}^0, \omega_{N/2}^1, ..., \omega_{N/2}^{N/2 - 1} \)!&lt;/p&gt;
+&lt;p&gt;Thus, we can proceed with &lt;strong&gt;divide-and-conquer recursion&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Let \( y_k^{[0]} = A^{[0]}(\omega_{N/2}^k) \)
+Let \( y_k^{[1]} = A^{[1]}(\omega_{N/2}^k) \)
+These are DFT problems of size \( N/2 \).&lt;/p&gt;
+&lt;p&gt;Then, the solution to the original problem \( A(\omega_N^k) \) can be obtained by combining the solutions from the subproblems:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;For \( k = 0, 1, ..., N/2 - 1 \):&lt;/p&gt;
+&lt;p&gt;\( A(\omega_N^k) = A^{[0]}(\omega_{N/2}^k) + \omega_N^k \cdot A^{[1]}(\omega_{N/2}^k) = y_k^{[0]} + \omega_N^k y_k^{[1]} \)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;For \( k = N/2, ..., N-1 \) (let \( k’ = k - N/2 \)):&lt;/p&gt;
+&lt;p&gt;\( \omega_N^{k} = \omega_N^{k’ + N/2} = -\omega_N^{k’} \)
+\( A(\omega_N^{k}) = A(\omega_N^{k’ + N/2}) = A^{[0]}(\omega_{N/2}^{k’}) + \omega_N^{k’ + N/2} \cdot A^{[1]}(\omega_{N/2}^{k’}) = y_{k’}^{[0]} - \omega_N^{k’} y_{k’}^{[1]} \)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;This process is the core of the FFT!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Complexity Analysis&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Each recursion level: We break a problem of size \( N \) into 2 problems of size \( N/2 \), and perform an \( O(N) \) merge operation (multiplying by \( \omega_N^k \) and adding).&lt;/li&gt;
+&lt;li&gt;The height of the recursion tree is \( \log_2 N \).&lt;/li&gt;
+&lt;li&gt;Total complexity: \( T(N) = 2T(N/2) + O(N) = O(N \log N) \).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;idft&#34;&gt;IDFT
+&lt;/h2&gt;&lt;p&gt;Now we have the point-value representation of \( C(x) \): \( ((\omega_N^0, C(\omega_N^0)), (\omega_N^1, C(\omega_N^1)), ..., (\omega_N^{N-1}, C(\omega_N^{N-1}))) \). How do we convert it back to coefficients \( (c_0, c_1, ..., c_{N-1}) \)? This process is called the &lt;strong&gt;Inverse Discrete Fourier Transform (IDFT)&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Remarkably, &lt;strong&gt;the process for IDFT is almost identical to that of DFT&lt;/strong&gt;.
+The matrix form of the DFT is:&lt;/p&gt;
+&lt;div&gt;
+$$
+\begin{bmatrix}
+y_0 \\
+y_1 \\
+y_2 \\
+\vdots \\
+y_{N-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &amp; 1 &amp; 1 &amp; \cdots &amp; 1 \\
+1 &amp; \omega_N &amp; \omega_N^2 &amp; \cdots &amp; \omega_N^{N-1} \\
+1 &amp; \omega_N^2 &amp; \omega_N^4 &amp; \cdots &amp; \omega_N^{2(N-1)} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+1 &amp; \omega_N^{N-1} &amp; \omega_N^{2(N-1)} &amp; \cdots &amp; \omega_N^{(N-1)(N-1)}
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\
+a_1 \\
+a_2 \\
+\vdots \\
+a_{N-1}
+\end{bmatrix}
+$$
+&lt;/div&gt;
+&lt;p&gt;This Vandermonde matrix \( V \) is almost invertible. Its inverse matrix \( V^{-1} \) is very similar to \( V \), except that each element \( \omega_N^k \) is replaced by \( \omega_N^{-k} \), and the entire matrix is multiplied by a factor of \( 1/N \).&lt;/p&gt;
+&lt;p&gt;This means that &lt;strong&gt;the process to compute the IDFT is&lt;/strong&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Take the point-value vector \( \vec{y} \) as input.&lt;/li&gt;
+&lt;li&gt;Replace all roots of unity \( \omega_N^k \) with their &lt;strong&gt;complex conjugates&lt;/strong&gt; \( \omega_N^{-k} \).&lt;/li&gt;
+&lt;li&gt;Perform the exact same algorithm as the FFT!&lt;/li&gt;
+&lt;li&gt;Finally, &lt;strong&gt;divide the result by \( N \)&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Thus, the complexity of IFFT is also \( O(N \log N) \).&lt;/p&gt;
+&lt;h1 id=&#34;summary&#34;&gt;Summary
+&lt;/h1&gt;&lt;p&gt;Suppose we want to compute \( A(x) \times B(x) \), with degree bounds \( n \) and \( m \) respectively.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Zero-padding&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Determine the degree bound \( N \geq n + m - 1 \), and ensure \( N \) is a power of 2.&lt;/li&gt;
+&lt;li&gt;Pad the coefficient vectors of \( A(x) \) and \( B(x) \) to length \( N \) with zeros.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Evaluation (FFT)&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Perform FFT on the zero-padded coefficient vector of \( A(x) \) to obtain its point-value representation \( \vec{A} = (A(\omega_N^0), A(\omega_N^1), ..., A(\omega_N^{N-1})) \).&lt;/li&gt;
+&lt;li&gt;Perform FFT on the zero-padded coefficient vector of \( B(x) \) to obtain its point-value representation \( \vec{B} = (B(\omega_N^0), B(\omega_N^1), ..., B(\omega_N^{N-1})) \).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Pointwise Multiplication&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Compute \( \vec{C} = \vec{A} \circ \vec{B} \), i.e., \( C(\omega_N^k) = A(\omega_N^k) \times B(\omega_N^k) \) for \( k=0,1,...,N-1 \).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Interpolation (IFFT)&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Perform the &lt;strong&gt;inverse FFT&lt;/strong&gt; on the point-value vector \( \vec{C} \) (i.e., take the conjugate roots of unity, perform FFT, and then divide by N). The result is the coefficient vector \( (c_0, c_1, ..., c_{N-1}) \) of the product polynomial \( C(x) \).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The final complexity is \( O(N \log N) \), which is far superior to the direct \( O(N^2) \) approach.&lt;/p&gt;
+&lt;p&gt;This is why the FFT is a cornerstone algorithm in numerous fields such as signal processing, image processing, and numerical computation. Through clever mathematical transformation and a divide-and-conquer strategy, it dramatically accelerates convolution (polynomial multiplication) operations.&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

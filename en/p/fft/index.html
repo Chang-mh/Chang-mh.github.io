@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="This is a subtitle">
+<title>FFT Study Notes</title>
+
+<link rel='canonical' href='https://Chang-mh.github.io/en/p/fft/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="FFT Study Notes">
+<meta property='og:description' content="This is a subtitle">
+<meta property='og:url' content='https://Chang-mh.github.io/en/p/fft/'>
+<meta property='og:site_name' content='❤️M.H.'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Mathematical Foundations' /><meta property='article:published_time' content='2025-09-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-09-09T00:00:00&#43;00:00'/><meta property='og:image' content='https://Chang-mh.github.io/p/fft/pexels-lum3n-44775-167682.jpg' />
+<meta name="twitter:title" content="FFT Study Notes">
+<meta name="twitter:description" content="This is a subtitle"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://Chang-mh.github.io/p/fft/pexels-lum3n-44775-167682.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/en/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/nazime_hu_87c03dc0523f28a2.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en">❤️M.H.</a></h1>
+            <h2 class="site-description">A Quiet Little Station</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://Chang-mh.github.io/en/" selected>English</option>
+                                
+                                    <option value="https://Chang-mh.github.io/" >中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#the-transformation">The Transformation</a>
+      <ol>
+        <li><a href="#dft-and-roots-of-unity">DFT and Roots of Unity</a></li>
+        <li><a href="#the-magic-of-divide-and-conquer">The Magic of Divide-and-Conquer</a></li>
+        <li><a href="#idft">IDFT</a></li>
+      </ol>
+    </li>
+    <li><a href="#summary">Summary</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/en/p/fft/">
+                <img src="/p/fft/pexels-lum3n-44775-167682_hu_9b3f54b2a93aae06.jpg"
+                        srcset="/p/fft/pexels-lum3n-44775-167682_hu_9b3f54b2a93aae06.jpg 800w, /p/fft/pexels-lum3n-44775-167682_hu_9a908da0955e3864.jpg 1600w"
+                        width="800" 
+                        height="533" 
+                        loading="lazy"
+                        alt="Featured image of post FFT Study Notes" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/en/categories/study/" >
+                Study
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/fft/">FFT Study Notes</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            This is a subtitle
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 09, 2025</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    8 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+        <footer class="article-translations">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+            <div>
+                
+                    <a href="https://Chang-mh.github.io/p/fft/" class="link">中文</a>
+                
+            </div>
+        </footer>
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="introduction">Introduction
+</h1><p>Suppose we have two polynomials:</p>
+<p>\( A(x) = a_0 + a_1x + a_2x^2 + ... + a_{n-1}x^{n-1} \)</p>
+<p>\( B(x) = b_0 + b_1x + b_2x^2 + ... + b_{m-1}x^{m-1} \)</p>
+<p>We want to compute their product:</p>
+<p>\( C(x) = A(x) \times B(x) = c_0 + c_1x + c_2x^2 + ... + c_{(n+m-2)}x^{(n+m-2)} \)</p>
+<p>where each coefficient \( c_k = \sum_{i=0}^{k} a_i b_{k-i} \).</p>
+<p>If we compute this <strong>directly (convolution)</strong>, we need approximately \( n \times m \) multiplications and additions. If both \( n \) and \( m \) are large, this \( O(n^2) \) complexity becomes very slow.</p>
+<p>The Fast Fourier Transform (FFT) provides a way to reduce the complexity to \( O(n \log n) \).</p>
+<h1 id="the-transformation">The Transformation
+</h1><p>The standard representation of a polynomial is the <strong>Coefficient Representation</strong>, which is \( (a_0, a_1, ..., a_{n-1}) \) as used above. There is another equivalent representation called the <strong>Point-Value Representation</strong>.</p>
+<p>It is well-known that two points uniquely determine a line. What about three points, four points, or even more? It has been proven that a polynomial of degree \( n-1 \) can be <strong>uniquely determined</strong> by its values at \( n \) distinct points \( (x_0, x_1, ..., x_{n-1}) \), which we can take as given.</p>
+<p>Polynomial multiplication in point-value representation becomes extremely simple:
+Assume we have polynomials \( A(x) \) and \( B(x) \).</p>
+<ol>
+<li>Take \( N \) points for \( A(x) \): \( (x_k, A(x_k)) \), \( k=0,1,...,N-1 \)</li>
+<li>Take the <strong>same</strong> \( N \) points for \( B(x) \): \( (x_k, B(x_k)) \), \( k=0,1,...,N-1 \)
+<em>Note: Here, \( N \) must be at least \(deg(A) + deg(B) + 1 \) (or more precisely, at least \(n + m - 1\)) to uniquely determine the product polynomial \( C(x) \).</em></li>
+<li>Then the values of the product \( C(x) = A(x) \times B(x) \) at these \( N \) points are:
+\( (x_k, C(x_k)) = (x_k, A(x_k) \times B(x_k)) \), \( k=0,1,...,N-1 \)</li>
+</ol>
+<p>Pointwise multiplication now only takes \( O(N) \) time! This is much better than \( O(N^2) \).</p>
+<p>Thus, the strategy for polynomial multiplication becomes: <strong>Coefficient Representation → Point-Value Representation → Pointwise Multiplication → Coefficient Representation</strong></p>
+<ol>
+<li><strong>Evaluation</strong>: Convert \( A(x) \) and \( B(x) \) from coefficient form to point-value form.</li>
+<li><strong>Pointwise Multiplication</strong>: Compute \( C(x_k) = A(x_k) \times B(x_k) \).</li>
+<li><strong>Interpolation</strong>: Convert \( C(x) \) from point-value form back to coefficient form.</li>
+</ol>
+<p>The core question now is: <strong>How can we quickly convert between coefficient representation and point-value representation?</strong>
+If we choose any \( N \) points arbitrarily, the complexity of the first step (evaluation) and the third step (interpolation) will still be \( O(N^2) \) (since computing each \( A(x_k) \) takes \( O(N) \) time).</p>
+<p>The ingenuity of the FFT lies in its <strong>careful selection of a special set of points</strong> and the use of a <strong>divide-and-conquer strategy</strong> to optimize both the evaluation and interpolation processes to \( O(N \log N) \).</p>
+<h2 id="dft-and-roots-of-unity">DFT and Roots of Unity
+</h2><p>The special set of points chosen by the FFT are the <strong>Roots of Unity</strong>.</p>
+<p>The <strong>Discrete Fourier Transform (DFT)</strong> is the evaluation of a polynomial \( A(x) \) at the \( N \) <strong>N-th roots of unity</strong> \( \omega_N^0, \omega_N^1, ..., \omega_N^{N-1} \). The resulting values \( (A(\omega_N^0), A(\omega_N^1), ..., A(\omega_N^{N-1})) \) are its DFT coefficients.</p>
+<p>The <strong>N-th roots of unity</strong> are the \( N \) complex solutions to the equation \( z^N = 1 \). They can be expressed as:
+\( \omega_N^k = e^{2\pi i k / N} = \cos(\frac{2\pi k}{N}) + i \sin(\frac{2\pi k}{N}) \), where \( k = 0, 1, ..., N-1 \), and \( i \) is the imaginary unit.</p>
+<p>The roots of unity have several <strong>crucial properties</strong> that form the basis of the FFT&rsquo;s divide-and-conquer approach:</p>
+<ol>
+<li><strong>Cancellation Lemma</strong>: \( \omega_{2N}^{2k} = \omega_N^k \)</li>
+<li><strong>Halving Lemma</strong>: If \( N \) is even, then \( \omega_N^{k + N/2} = -\omega_N^k \)</li>
+<li><strong>Summation Lemma</strong>: This will be used later in the inverse transform.</li>
+</ol>
+<h2 id="the-magic-of-divide-and-conquer">The Magic of Divide-and-Conquer
+</h2><p>The FFT is an algorithm for computing the DFT quickly. We assume \( N \) is a power of 2 (if not, we can pad with zeros to the nearest power of 2).</p>
+<p>We split the polynomial \( A(x) \) into two new polynomials of half the size based on even and odd indices:</p>
+<p>\( A^{[0]}(x) = a_0 + a_2x + a_4x^2 + ... + a_{N-2}x^{N/2 - 1} \) (even-indexed coefficients)</p>
+<p>\( A^{[1]}(x) = a_1 + a_3x + a_5x^2 + ... + a_{N-1}x^{N/2 - 1} \) (odd-indexed coefficients)</p>
+<p>It&rsquo;s easy to see that the original polynomial can be expressed as:
+\( A(x) = A^{[0]}(x^2) + x A^{[1]}(x^2) \)</p>
+<p>Now, our problem transforms from &ldquo;evaluate \( A(x) \) at \( N \) points \( (\omega_N^0, \omega_N^1, ..., \omega_N^{N-1}) \)&rdquo; to &ldquo;evaluate \( A^{[0]}(x) \) and \( A^{[1]}(x) \) at \( N/2 \) points \( ((\omega_N^0)^2, (\omega_N^1)^2, ..., (\omega_N^{N-1})^2) \)&rdquo;.</p>
+<p>According to the <strong>Cancellation Lemma</strong>: \( (\omega_N^k)^2 = \omega_{N/2}^k \)
+Furthermore, \( (\omega_N^{k + N/2})^2 = (\omega_N^k \omega_N^{N/2})^2 = (\omega_N^k \cdot -1)^2 = (\omega_N^k)^2 = \omega_{N/2}^k \)</p>
+<p>This means that the \( N \) squared points we need to evaluate actually consist of only \( N/2 \) <strong>distinct values</strong>: \( \omega_{N/2}^0, \omega_{N/2}^1, ..., \omega_{N/2}^{N/2 - 1} \)!</p>
+<p>Thus, we can proceed with <strong>divide-and-conquer recursion</strong>:</p>
+<p>Let \( y_k^{[0]} = A^{[0]}(\omega_{N/2}^k) \)
+Let \( y_k^{[1]} = A^{[1]}(\omega_{N/2}^k) \)
+These are DFT problems of size \( N/2 \).</p>
+<p>Then, the solution to the original problem \( A(\omega_N^k) \) can be obtained by combining the solutions from the subproblems:</p>
+<ol>
+<li>
+<p>For \( k = 0, 1, ..., N/2 - 1 \):</p>
+<p>\( A(\omega_N^k) = A^{[0]}(\omega_{N/2}^k) + \omega_N^k \cdot A^{[1]}(\omega_{N/2}^k) = y_k^{[0]} + \omega_N^k y_k^{[1]} \)</p>
+</li>
+<li>
+<p>For \( k = N/2, ..., N-1 \) (let \( k’ = k - N/2 \)):</p>
+<p>\( \omega_N^{k} = \omega_N^{k’ + N/2} = -\omega_N^{k’} \)
+\( A(\omega_N^{k}) = A(\omega_N^{k’ + N/2}) = A^{[0]}(\omega_{N/2}^{k’}) + \omega_N^{k’ + N/2} \cdot A^{[1]}(\omega_{N/2}^{k’}) = y_{k’}^{[0]} - \omega_N^{k’} y_{k’}^{[1]} \)</p>
+</li>
+</ol>
+<p><strong>This process is the core of the FFT!</strong></p>
+<p><strong>Complexity Analysis</strong>:</p>
+<ul>
+<li>Each recursion level: We break a problem of size \( N \) into 2 problems of size \( N/2 \), and perform an \( O(N) \) merge operation (multiplying by \( \omega_N^k \) and adding).</li>
+<li>The height of the recursion tree is \( \log_2 N \).</li>
+<li>Total complexity: \( T(N) = 2T(N/2) + O(N) = O(N \log N) \).</li>
+</ul>
+<h2 id="idft">IDFT
+</h2><p>Now we have the point-value representation of \( C(x) \): \( ((\omega_N^0, C(\omega_N^0)), (\omega_N^1, C(\omega_N^1)), ..., (\omega_N^{N-1}, C(\omega_N^{N-1}))) \). How do we convert it back to coefficients \( (c_0, c_1, ..., c_{N-1}) \)? This process is called the <strong>Inverse Discrete Fourier Transform (IDFT)</strong>.</p>
+<p>Remarkably, <strong>the process for IDFT is almost identical to that of DFT</strong>.
+The matrix form of the DFT is:</p>
+<div>
+$$
+\begin{bmatrix}
+y_0 \\
+y_1 \\
+y_2 \\
+\vdots \\
+y_{N-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 1 & 1 & \cdots & 1 \\
+1 & \omega_N & \omega_N^2 & \cdots & \omega_N^{N-1} \\
+1 & \omega_N^2 & \omega_N^4 & \cdots & \omega_N^{2(N-1)} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & \omega_N^{N-1} & \omega_N^{2(N-1)} & \cdots & \omega_N^{(N-1)(N-1)}
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\
+a_1 \\
+a_2 \\
+\vdots \\
+a_{N-1}
+\end{bmatrix}
+$$
+</div>
+<p>This Vandermonde matrix \( V \) is almost invertible. Its inverse matrix \( V^{-1} \) is very similar to \( V \), except that each element \( \omega_N^k \) is replaced by \( \omega_N^{-k} \), and the entire matrix is multiplied by a factor of \( 1/N \).</p>
+<p>This means that <strong>the process to compute the IDFT is</strong>:</p>
+<ol>
+<li>Take the point-value vector \( \vec{y} \) as input.</li>
+<li>Replace all roots of unity \( \omega_N^k \) with their <strong>complex conjugates</strong> \( \omega_N^{-k} \).</li>
+<li>Perform the exact same algorithm as the FFT!</li>
+<li>Finally, <strong>divide the result by \( N \)</strong>.</li>
+</ol>
+<p>Thus, the complexity of IFFT is also \( O(N \log N) \).</p>
+<h1 id="summary">Summary
+</h1><p>Suppose we want to compute \( A(x) \times B(x) \), with degree bounds \( n \) and \( m \) respectively.</p>
+<ol>
+<li>
+<p><strong>Zero-padding</strong>:</p>
+<ul>
+<li>Determine the degree bound \( N \geq n + m - 1 \), and ensure \( N \) is a power of 2.</li>
+<li>Pad the coefficient vectors of \( A(x) \) and \( B(x) \) to length \( N \) with zeros.</li>
+</ul>
+</li>
+<li>
+<p><strong>Evaluation (FFT)</strong>:</p>
+<ul>
+<li>Perform FFT on the zero-padded coefficient vector of \( A(x) \) to obtain its point-value representation \( \vec{A} = (A(\omega_N^0), A(\omega_N^1), ..., A(\omega_N^{N-1})) \).</li>
+<li>Perform FFT on the zero-padded coefficient vector of \( B(x) \) to obtain its point-value representation \( \vec{B} = (B(\omega_N^0), B(\omega_N^1), ..., B(\omega_N^{N-1})) \).</li>
+</ul>
+</li>
+<li>
+<p><strong>Pointwise Multiplication</strong>:</p>
+<ul>
+<li>Compute \( \vec{C} = \vec{A} \circ \vec{B} \), i.e., \( C(\omega_N^k) = A(\omega_N^k) \times B(\omega_N^k) \) for \( k=0,1,...,N-1 \).</li>
+</ul>
+</li>
+<li>
+<p><strong>Interpolation (IFFT)</strong>:</p>
+<ul>
+<li>Perform the <strong>inverse FFT</strong> on the point-value vector \( \vec{C} \) (i.e., take the conjugate roots of unity, perform FFT, and then divide by N). The result is the coefficient vector \( (c_0, c_1, ..., c_{N-1}) \) of the product polynomial \( C(x) \).</li>
+</ul>
+</li>
+</ol>
+<p>The final complexity is \( O(N \log N) \), which is far superior to the direct \( O(N^2) \) approach.</p>
+<p>This is why the FFT is a cornerstone algorithm in numerous fields such as signal processing, image processing, and numerical computation. Through clever mathematical transformation and a divide-and-conquer strategy, it dramatically accelerates convolution (polynomial multiplication) operations.</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/mathematical-foundations/">Mathematical Foundations</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>❤️M.H. All rights reserved</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/ntt/">
+        
+        
+            <div class="article-image">
+                <img src="/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.46f61e8ea6a2df8fc5bf1d24a17c44a6_hu_57b7cab9514860c.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post NTT Study Notes"
+                        data-key="ntt" 
+                        data-hash="md5-RvYejqai34/Fvx0koXxEpg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">NTT Study Notes</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"avatar":false,"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo"],"lang":"zh-CN","locale":{"admin":"管理员","placeholder":"留下你的评论..."},"pageview":true,"requiredMeta":["name"],"serverURL":"https://mh-lhyduhkry-chang-mhs-projects.vercel.app"});
+</script>
+
+    
+
+    <footer class="footer">
+    <div class="footer__inner">        
+        <div class="copyright">
+            
+                <span>© 2025 ❤️M.H.</span>
+                <span class="footer-divider">·</span>
+                <span>Write with heart, share with mind</span>
+            
+        </div>
+    </div>
+</footer>
+
+<style>
+.footer {
+    margin-top: 4rem;
+    padding: 2rem 0 1.5rem;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.footer-divider {
+    margin: 0 0.5rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+    .footer-top-border {
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            var(--border-color-dark) 20%, 
+            var(--border-color-dark) 80%, 
+            transparent 100%);
+    }
+}
+</style>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

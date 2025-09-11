@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>密码学 on ❤️M.H.</title>
+        <link>https://Chang-mh.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/</link>
+        <description>Recent content in 密码学 on ❤️M.H.</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>M.H.</copyright>
+        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://Chang-mh.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>NTT学习笔记</title>
+        <link>https://Chang-mh.github.io/p/ntt/</link>
+        <pubDate>Thu, 11 Sep 2025 00:00:00 +0000</pubDate>
+        
+        <guid>https://Chang-mh.github.io/p/ntt/</guid>
+        <description>&lt;img src="https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT学习笔记" /&gt;&lt;h1 id=&#34;引言&#34;&gt;引言
+&lt;/h1&gt;&lt;p&gt;在之前的一篇文章里，我们详细了解了精妙的FFT算法。但它有一个与生俱来的缺点：在复数域上。单位复根的实部和虚部分别是一个正弦及余弦函数，有大量浮点数计算，计算量很大且浮点数运算也会产生较大的误差。&lt;/p&gt;
+&lt;p&gt;所以我们可不可以把操作对象变成整数呢？快速数论变换（NTT）应运而生。&lt;/p&gt;
+&lt;h1 id=&#34;变换&#34;&gt;变换
+&lt;/h1&gt;&lt;p&gt;NTT使用的分治办法，与FTT使用的分治办法完全一致。这意味着，只需在FTT的基础上进行简单修改，即可得到NTT。&lt;/p&gt;
+&lt;h2 id=&#34;原根&#34;&gt;原根
+&lt;/h2&gt;&lt;p&gt;对于一个素数 $p$，它的原根 $g$ 是一个整数，使得 $g^1, g^2, \ldots, g^{p-1} \mod p$ 这个序列，能够生成整个乘法群 $Z_p^*$（即 ${1, 2, \ldots, p-1}$ 中的所有元素）。&lt;/p&gt;
+&lt;p&gt;换句话说，$g$ 的幂模 $p$ 的结果两两不同，且覆盖了 $1$ 到 $p-1$ 的所有整数。&lt;/p&gt;
+&lt;p&gt;例如，素数 $p = 7$。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;检查 $g = 3$：$3^1 \equiv 3$, $3^2 \equiv 2$, $3^3 \equiv 6$, $3^4 \equiv 4$, $3^5 \equiv 5$, $3^6 \equiv 1 \mod 7$。&lt;/li&gt;
+&lt;li&gt;序列是 ${3, 2, 6, 4, 5, 1}$，覆盖了 $1-6$ 的所有数。所以 $3$ 是 $7$ 的一个原根。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;仿照单位复数根的形式，也将原根的取值看成一个圆，不过这个圆上只有有限个点，每个点表达的是模数的剩余系中的值。&lt;/p&gt;
+&lt;p&gt;我们令 $\omega_n \equiv g^{(p-1)/n} \mod p$​。这样定义的 $\omega_n$ 满足 $n$ 次单位根的性质：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;$\omega_n^n \equiv (g^{(p-1)/n})^n \equiv g^{p-1} \equiv 1 \mod p$ （费马小定理）&lt;/li&gt;
+&lt;li&gt;$\omega_n^{n/2} \equiv g^{(p-1)/2} \equiv -1 \mod p$ （因为 $g^{(p-1)/2}$ 是 $1$ 的平方根，只能是 $\pm 1$，而根据原根定义，它不能是 $1$，所以是 $-1$）&lt;/li&gt;
+&lt;li&gt;序列 $\omega_n^0, \omega_n^1, \ldots, \omega_n^{n-1}$ 是互不相同的。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;基于这三点，FFT中的&lt;strong&gt;消去引理&lt;/strong&gt;和&lt;strong&gt;折半引理&lt;/strong&gt;同样成立：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;消去引理&lt;/strong&gt;：$\omega_{dn}^{dk} = g^{\frac{p-1}{dn} \cdot dk} = g^{\frac{p-1}{n} \cdot k} = \omega_n^k$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;折半引理&lt;/strong&gt;：$\omega_n^{k + n/2} = \omega_n^k \cdot \omega_n^{n/2} = \omega_n^k \cdot (-1) = -\omega_n^k$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;完美！现在我们有了一个在整数模 $p$ 域中完美替代复数单位根的元素 $\omega_n$。&lt;/p&gt;
+&lt;p&gt;有了 $\omega_n$，NTT的实现就和FFT几乎一模一样了。过程依然是：&lt;strong&gt;求值（NTT）→ 点乘 → 插值（逆NTT）&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;假设我们有一个多项式 $A(x)$，系数在模 $p$ 下，次数小于 $n$（$n$ 是 $2$ 的幂，且 $n \mid p-1$）。&lt;/p&gt;
+&lt;h2 id=&#34;正变换ntt&#34;&gt;正变换（NTT）
+&lt;/h2&gt;&lt;p&gt;递归分治的过程与FFT完全一致：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;将多项式按奇偶索引分成两个子多项式：$A^{[0]}(x)$ 和 $A^{[1]}(x)$。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;递归计算 $\operatorname{NTT}(A^{[0]})$ 和 $\operatorname{NTT}(A^{[1]})$。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;合并结果：&lt;/p&gt;
+&lt;p&gt;对于 $k = 0$ 到 $n/2 - 1$：&lt;/p&gt;
+&lt;p&gt;$\operatorname{NTT}(A)[k] = (\operatorname{NTT}(A^{[0]})[k] + \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$&lt;/p&gt;
+&lt;p&gt;$\operatorname{NTT}(A)[k + n/2] = (\operatorname{NTT}(A^{[0]})[k] - \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：这里的加法、乘法、取模都是在模 $p$ 的整数域中进行的，没有浮点数，没有精度误差！&lt;/p&gt;
+&lt;h2 id=&#34;逆变换intt&#34;&gt;逆变换（INTT）
+&lt;/h2&gt;&lt;p&gt;逆NTT（INTT）与NTT的差别仅在于：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用 $\omega_n^{-1} \mod p$ （即 $\omega_n$ 的模逆元）代替 $\omega_n$。&lt;/li&gt;
+&lt;li&gt;最后结果需要乘以 $n^{-1} \mod p$ （即 $n$ 的模逆元）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;INTT的公式如下：
+$\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \omega_n^{-kj} \right) \mod p$&lt;/p&gt;
+&lt;p&gt;在实际代码中，我们通常使用&lt;strong&gt;迭代（非递归）&lt;/strong&gt; 的蝴蝶操作来实现NTT/INTT，以获得更高的效率。&lt;/p&gt;
+&lt;h2 id=&#34;模数-p&#34;&gt;模数 $p$
+&lt;/h2&gt;&lt;p&gt;NTT有一个关键限制：&lt;strong&gt;变换长度 $n$ 必须是 $p-1$ 的因子&lt;/strong&gt;。因为我们需要 $\omega_n = g^{(p-1)/n}$ 是一个整数，这就要求 $n$ 必须能整除 $p-1$。&lt;/p&gt;
+&lt;p&gt;常见的做法是选择一些形式特殊的素数，使得 $p-1$ 包含一个非常大的 $2$ 的幂因子。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;常见NTT模数&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;$p = 469762049 = 7 \cdot 2^{26} + 1$，$g = 3$&lt;/p&gt;
+&lt;p&gt;$p = 998244353 = 7\cdot17 \cdot 2^{23} + 1$，$g = 3$&lt;/p&gt;
+&lt;p&gt;$p = 1004535809 = 479 \cdot 2^{21} + 1$，$g = 3$&lt;/p&gt;
+&lt;p&gt;如果问题中的数值非常大，可能需要使用&lt;strong&gt;任意模数NTT&lt;/strong&gt;（通过CRT合并多个不同模数NTT的结果）。&lt;/p&gt;
+&lt;h1 id=&#34;小结&#34;&gt;小结
+&lt;/h1&gt;&lt;p&gt;假设我们计算 $A(x) \times B(x) \mod p$，系数在 $[0, p-1]$ 内。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;补零&lt;/strong&gt;：确定长度 $N \geq \operatorname{len}(A) + \operatorname{len}(B) - 1$，且 $N$ 是 $2$ 的幂，并且 $N \mid (p-1)$。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;求值（NTT）&lt;/strong&gt;：计算 $\vec{A&amp;rsquo;} = \operatorname{NTT}(\vec{A})$，$\vec{B&amp;rsquo;} = \operatorname{NTT}(\vec{B})$。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;点乘&lt;/strong&gt;：计算 $\vec{C&amp;rsquo;}[k] = \vec{A&amp;rsquo;}[k] \cdot \vec{B&amp;rsquo;}[k] \mod p$，$k=0,1,\ldots,N-1$。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;插值（INTT）&lt;/strong&gt;：计算 $\vec{C} = \operatorname{INTT}(\vec{C&amp;rsquo;})$。结果 $\vec{C}$ 就是 $A(x) \times B(x) \mod p$ 的系数向量。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数论变换（NTT）完美地将FFT的思想移植到了整数模域中。它通过用&lt;strong&gt;原根&lt;/strong&gt;替代&lt;strong&gt;单位根&lt;/strong&gt;，用&lt;strong&gt;模运算&lt;/strong&gt;替代复数运算，在保留了 $O(n \log n)$ 高效计算能力的同时，提供了绝对精确的结果和更快的速度，使其成为算法竞赛和工程应用中处理大规模整数、多项式卷积问题的首选利器。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

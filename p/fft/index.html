@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="这是一个副标题">
+<title>FFT学习笔记</title>
+
+<link rel='canonical' href='https://Chang-mh.github.io/p/fft/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="FFT学习笔记">
+<meta property='og:description' content="这是一个副标题">
+<meta property='og:url' content='https://Chang-mh.github.io/p/fft/'>
+<meta property='og:site_name' content='❤️M.H.'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='数学基础' /><meta property='article:published_time' content='2025-09-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-09-09T00:00:00&#43;00:00'/><meta property='og:image' content='https://Chang-mh.github.io/p/fft/pexels-lum3n-44775-167682.jpg' />
+<meta name="twitter:title" content="FFT学习笔记">
+<meta name="twitter:description" content="这是一个副标题"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://Chang-mh.github.io/p/fft/pexels-lum3n-44775-167682.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/nazime_hu_87c03dc0523f28a2.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">❤️M.H.</a></h1>
+            <h2 class="site-description">一个安静的小站</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://Chang-mh.github.io/en/" >English</option>
+                                
+                                    <option value="https://Chang-mh.github.io/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引入">引入</a></li>
+    <li><a href="#变换">变换</a>
+      <ol>
+        <li><a href="#dft-与单位根">DFT 与单位根</a></li>
+        <li><a href="#分治的魔法">分治的魔法</a></li>
+        <li><a href="#idft">IDFT</a></li>
+      </ol>
+    </li>
+    <li><a href="#小结">小结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/fft/">
+                <img src="/p/fft/pexels-lum3n-44775-167682_hu_9b3f54b2a93aae06.jpg"
+                        srcset="/p/fft/pexels-lum3n-44775-167682_hu_9b3f54b2a93aae06.jpg 800w, /p/fft/pexels-lum3n-44775-167682_hu_9a908da0955e3864.jpg 1600w"
+                        width="800" 
+                        height="533" 
+                        loading="lazy"
+                        alt="Featured image of post FFT学习笔记" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/" >
+                学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/fft/">FFT学习笔记</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            这是一个副标题
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 09, 2025</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 5 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+        <footer class="article-translations">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+            <div>
+                
+                    <a href="https://Chang-mh.github.io/en/p/fft/" class="link">English</a>
+                
+            </div>
+        </footer>
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="引入">引入
+</h1><p>假设我们有两个多项式：</p>
+<p>\( A(x) = a_0 + a_1x + a_2x^2 + ... + a_{n-1}x^{n-1} \)</p>
+<p>\( B(x) = b_0 + b_1x + b_2x^2 + ... + b_{m-1}x^{m-1} \)</p>
+<p>我们希望计算它们的乘积：</p>
+<p>\( C(x) = A(x) \times B(x) = c_0 + c_1x + c_2x^2 + ... + c_{(n+m-2)}x^{(n+m-2)} \)</p>
+<p>其中，每个系数 \( c_k = \sum_{i=0}^{k} a_i b_{k-i} \)。</p>
+<p>如果<strong>直接计算（卷积）</strong>，我们需要计算大约 \( n \times m \) 次乘法和加法。如果 \( n \) 和 \( m \) 都很大，这个 \( O(n^2) \) 的复杂度会非常慢。</p>
+<p>而快速傅里叶变换（FFT）提供了一种将复杂度降至 \( O(n \log n) \) 的方法。</p>
+<h1 id="变换">变换
+</h1><p>多项式的标准表示法是<strong>系数表示法</strong>（Coefficient Representation），即我们上面用的 \( (a_0, a_1, ..., a_{n-1}) \)。还有一种等价的表示法，叫做<strong>点值表示法</strong>（Point-Value Representation）。</p>
+<p>众所周知，两点唯一确定一条直线。那么三个点，四个点，甚至更多点呢？已有证明，一个 \( n-1 \) 次多项式可以由其在 \( n \) 个不同点 \( (x_0, x_1, ..., x_{n-1}) \) 上的取值 \( (A(x_0), A(x_1), ..., A(x_{n-1})) \) <strong>唯一确定</strong>，咱知道就好。</p>
+<p>点值表示法下的多项式乘法变得极其简单：
+假设我们有多项式 \( A(x) \) 和 \( B(x) \)。</p>
+<ol>
+<li>为 \( A(x) \) 取 \( N \) 个点：\( (x_k, A(x_k)) \)，\( k=0,1,...,N-1 \)</li>
+<li>为 \( B(x) \) 取<strong>同样</strong>的 \( N \) 个点：\( (x_k, B(x_k)) \)，\( k=0,1,...,N-1 \)
+<em>注意，这里 \( N \) 必须至少是 \(deg(A) + deg(B) - 1 \)，否则乘积多项式 \( C(x) \) 无法被唯一确定。</em></li>
+<li>那么乘积 \( C(x) = A(x) \times B(x) \) 在这 \( N \) 个点上的值就是：
+\( (x_k, C(x_k)) = (x_k, A(x_k) \times B(x_k)) \)，\( k=0,1,...,N-1 \)</li>
+</ol>
+<p>此时点值相乘只需要 \( O(N) \) 的时间！这可比 \( O(N^2) \) 好多了。</p>
+<p>于是，整个多项式乘法的策略就变成了：<strong>系数表示 → 点值表示 → 点值相乘 → 系数表示</strong></p>
+<ol>
+<li>求值（Evaluation）：将 \( A(x) \) 和 \( B(x) \) 从系数形式转换为点值形式。</li>
+<li>点乘（Pointwise Multiplication）：计算 \( C(x_k) = A(x_k) \times B(x_k) \)。</li>
+<li>插值（Interpolation）：将 \( C(x) \) 从点值形式转换回系数形式。</li>
+</ol>
+<p>现在的核心问题是：<strong>如何快速地在系数表示和点值表示之间进行转换？</strong>
+如果随便选 \( N \) 个点，第一步（求值）和第三步（插值）的复杂度仍然是 \( O(N^2) \)（因为计算每个 \( A(x_k) \) 需要 \( O(N) \) 时间）。</p>
+<p>FFT 的精妙就在于它<strong>精心选择了一组特殊的点</strong>，并利用<strong>分治策略</strong>，将求值和插值的过程都优化到了 \( O(N \log N) \)。</p>
+<h2 id="dft-与单位根">DFT 与单位根
+</h2><p>FFT 选择的这组特殊的点，是<strong>单位根（Roots of Unity）</strong>。</p>
+<p><strong>离散傅里叶变换（DFT）</strong> 就是将一个多项式 \( A(x) \) 在 \( N \) 个 <strong>\( N \)次单位根</strong> \( \omega_N^0, \omega_N^1, ..., \omega_N^{N-1} \) 上进行求值，得到的结果 \( (A(\omega_N^0), A(\omega_N^1), ..., A(\omega_N^{N-1})) \) 就是其DFT系数。</p>
+<p><strong>\( N \)次单位根</strong>是方程 \( z^N = 1 \) 的 \( N \) 个复数解。它们可以被表示为：
+\( \omega_N^k = e^{2\pi i k / N} = \cos(\frac{2\pi k}{N}) + i \sin(\frac{2\pi k}{N}) \)， 其中 \( k = 0, 1, ..., N-1 \)，\( i \) 是虚数单位。</p>
+<p>单位根有几个<strong>极其重要的性质</strong>，是FFT分治的基础：</p>
+<ol>
+<li><strong>消去引理</strong>: \( \omega_{2N}^{2k} = \omega_N^k \)</li>
+<li><strong>折半引理</strong>: 如果 \( N \) 是偶数，那么 \( \omega_N^{k + N/2} = -\omega_N^k \)</li>
+<li><strong>求和引理</strong>：稍后在逆变换中会用到。</li>
+</ol>
+<h2 id="分治的魔法">分治的魔法
+</h2><p>FFT 是快速计算 DFT 的算法。我们假设 \( N \) 是 2 的幂（如果不是，可以补零到最近的 2 的幂）。</p>
+<p>我们将多项式 \( A(x) \) 按奇偶项分成两个新的、规模减半的多项式：</p>
+<p>\( A^{[0]}(x) = a_0 + a_2x + a_4x^2 + ... + a_{N-2}x^{N/2 - 1} \) （偶数索引项）</p>
+<p>\( A^{[1]}(x) = a_1 + a_3x + a_5x^2 + ... + a_{N-1}x^{N/2 - 1} \) （奇数索引项）</p>
+<p>很容易发现，原多项式可以表示为：
+\( A(x) = A^{[0]}(x^2) + x A^{[1]}(x^2) \)</p>
+<p>现在，我们的问题从“求 \( A(x) \) 在 \( N \) 个点 \( (\omega_N^0, \omega_N^1, ..., \omega_N^{N-1}) \) 上的值”，变成了“求 \( A^{[0]}(x) \) 和 \( A^{[1]}(x) \) 在 \( N/2 \) 个点 \( ((\omega_N^0)^2, (\omega_N^1)^2, ..., (\omega_N^{N-1})^2) \) 上的值”。</p>
+<p>根据<strong>消去引理</strong>：\( (\omega_N^k)^2 = \omega_{N/2}^k \)
+并且，\( (\omega_N^{k + N/2})^2 = (\omega_N^k \omega_N^{N/2})^2 = (\omega_N^k \cdot -1)^2 = (\omega_N^k)^2 = \omega_{N/2}^k \)</p>
+<p>这意味着，我们需要求值的 \( N \) 个平方点，实际上只有 \( N/2 \) 个<strong>不同的值</strong>：\( \omega_{N/2}^0, \omega_{N/2}^1, ..., \omega_{N/2}^{N/2 - 1} \)！</p>
+<p>于是，我们可以进行<strong>分治递归</strong>：</p>
+<p>设 \( y_k^{[0]} = A^{[0]}(\omega_{N/2}^k) \)
+设 \( y_k^{[1]} = A^{[1]}(\omega_{N/2}^k) \)
+这些是规模为 \( N/2 \) 的DFT问题。</p>
+<p>那么，原问题 \( A(\omega_N^k) \) 的解可以通过合并子问题的解得到：</p>
+<ol>
+<li>
+<p>对于 \( k = 0, 1, ..., N/2 - 1 \):</p>
+<p>\( A(\omega_N^k) = A^{[0]}(\omega_{N/2}^k) + \omega_N^k \cdot A^{[1]}(\omega_{N/2}^k) = y_k^{[0]} + \omega_N^k y_k^{[1]} \)</p>
+</li>
+<li>
+<p>对于 \( k = N/2, ..., N-1 \)（令 \( k’ = k - N/2 \)）:</p>
+<p>\( \omega_N^{k} = \omega_N^{k’ + N/2} = -\omega_N^{k’} \)
+\( A(\omega_N^{k}) = A(\omega_N^{k’ + N/2}) = A^{[0]}(\omega_{N/2}^{k’}) + \omega_N^{k’ + N/2} \cdot A^{[1]}(\omega_{N/2}^{k’}) = y_{k’}^{[0]} - \omega_N^{k’} y_{k’}^{[1]} \)</p>
+</li>
+</ol>
+<p><strong>这个过程就是FFT的核心！</strong></p>
+<p><strong>复杂度分析</strong>：</p>
+<ul>
+<li>每层递归：我们将一个规模为 \( N \) 的问题分解为 2 个规模为 \( N/2 \) 的问题，并进行 \( O(N) \) 的合并操作（乘以 \( \omega_N^k \) 并相加）。</li>
+<li>递归树的高度是 \( \log_2 N \)。</li>
+<li>总复杂度：\( T(N) = 2T(N/2) + O(N) = O(N \log N) \)。</li>
+</ul>
+<h2 id="idft">IDFT
+</h2><p>现在我们有了 \( C(x) \) 的点值表示 \( ((\omega_N^0, C(\omega_N^0)), (\omega_N^1, C(\omega_N^1)), ..., (\omega_N^{N-1}, C(\omega_N^{N-1}))) \)，如何变回系数 \( (c_0, c_1, ..., c_{N-1}) \)？这个过程称为<strong>逆离散傅里叶变换（IDFT）</strong>。</p>
+<p>神奇的是，<strong>IDFT的过程和DFT几乎一模一样</strong>。
+DFT的矩阵形式是：</p>
+<div>
+$$
+\begin{bmatrix}
+y_0 \\
+y_1 \\
+y_2 \\
+\vdots \\
+y_{N-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 1 & 1 & \cdots & 1 \\
+1 & \omega_N & \omega_N^2 & \cdots & \omega_N^{N-1} \\
+1 & \omega_N^2 & \omega_N^4 & \cdots & \omega_N^{2(N-1)} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & \omega_N^{N-1} & \omega_N^{2(N-1)} & \cdots & \omega_N^{(N-1)(N-1)}
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\
+a_1 \\
+a_2 \\
+\vdots \\
+a_{N-1}
+\end{bmatrix}
+$$
+</div>
+这个范德蒙德矩阵 \( V \) 几乎是可逆的。其逆矩阵 \( V^{-1} \) 与 \( V \) 非常相似，只是把每个元素 \( \omega_N^k \) 替换为 \( \omega_N^{-k} \)，并且整体乘以系数 \( 1/N \)。
+<p>也就是说，<strong>计算IDFT的过程就是</strong>：</p>
+<ol>
+<li>将点值向量 \( \vec{y} \) 作为输入。</li>
+<li>将单位根 \( \omega_N^k \) 全部替换为其<strong>共轭</strong> \( \omega_N^{-k} \)。</li>
+<li>执行一遍和FFT完全相同的算法！</li>
+<li>最后将得到的结果<strong>除以 \( N \)</strong>。</li>
+</ol>
+<p>所以，IFFT 的复杂度也是 \( O(N \log N) \)。</p>
+<h1 id="小结">小结
+</h1><p>假设我们要计算 \( A(x) \times B(x) \)，它们的次数界分别为 \( n \) 和 \( m \)。</p>
+<ol>
+<li>
+<p><strong>补零（Zero-padding）</strong>：</p>
+<ul>
+<li>确定次数界 \( N \geq n + m - 1 \)，并且 \( N \) 是 2 的幂。</li>
+<li>将 \( A(x) \) 和 \( B(x) \) 的系数向量长度都补到 \( N \)，后面补零。</li>
+</ul>
+</li>
+<li>
+<p><strong>求值（FFT）</strong>：</p>
+<ul>
+<li>对补零后的 \( A(x) \) 的系数向量执行FFT，得到其点值表示 \( \vec{A} = (A(\omega_N^0), A(\omega_N^1), ..., A(\omega_N^{N-1})) \)。</li>
+<li>对补零后的 \( B(x) \) 的系数向量执行FFT，得到其点值表示 \( \vec{B} = (B(\omega_N^0), B(\omega_N^1), ..., B(\omega_N^{N-1})) \)。</li>
+</ul>
+</li>
+<li>
+<p><strong>点乘（Pointwise Multiply）</strong>：</p>
+<ul>
+<li>计算 \( \vec{C} = \vec{A} \circ \vec{B} \)，即 \( C(\omega_N^k) = A(\omega_N^k) \times B(\omega_N^k) \) for \( k=0,1,...,N-1 \)。</li>
+</ul>
+</li>
+<li>
+<p><strong>插值（IFFT）</strong>：</p>
+<ul>
+<li>对点值向量 \( \vec{C} \) 执行<strong>逆FFT</strong>（即将单位根取共轭，做FFT，再除以N），得到的结果就是乘积多项式 \( C(x) \) 的系数向量 \( (c_0, c_1, ..., c_{N-1}) \)。</li>
+</ul>
+</li>
+</ol>
+<p>最终复杂度为 \( O(N \log N) \)，远优于直接的 \( O(N^2) \)。</p>
+<p>这就是FFT为何在信号处理、图像处理、数值计算等众多领域成为基石算法的原因。它通过巧妙的数学变换和分治策略，极大地加速了卷积（多项式乘法）运算。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/">数学基础</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>❤️M.H. All rights reserved</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/ntt/">
+        
+        
+            <div class="article-image">
+                <img src="/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.46f61e8ea6a2df8fc5bf1d24a17c44a6_hu_57b7cab9514860c.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post NTT学习笔记"
+                        data-key="ntt" 
+                        data-hash="md5-RvYejqai34/Fvx0koXxEpg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">NTT学习笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"avatar":false,"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo"],"lang":"zh-CN","locale":{"admin":"管理员","placeholder":"留下你的评论..."},"pageview":true,"requiredMeta":["name"],"serverURL":"https://mh-lhyduhkry-chang-mhs-projects.vercel.app"});
+</script>
+
+    
+
+    <footer class="footer">
+    <div class="footer__inner">        
+        <div class="copyright">
+            
+                <span>© 2025 ❤️M.H.</span>
+                <span class="footer-divider">·</span>
+                <span>静心写作，分享所知</span>
+            
+        </div>
+    </div>
+</footer>
+
+<style>
+.footer {
+    margin-top: 4rem;
+    padding: 2rem 0 1.5rem;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.footer-divider {
+    margin: 0 0.5rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+    .footer-top-border {
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            var(--border-color-dark) 20%, 
+            var(--border-color-dark) 80%, 
+            transparent 100%);
+    }
+}
+</style>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

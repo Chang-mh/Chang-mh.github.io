@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="This is a subtitle">
+<title>NTT Study Notes</title>
+
+<link rel='canonical' href='https://Chang-mh.github.io/en/p/ntt/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="NTT Study Notes">
+<meta property='og:description' content="This is a subtitle">
+<meta property='og:url' content='https://Chang-mh.github.io/en/p/ntt/'>
+<meta property='og:site_name' content='❤️M.H.'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Mathematical Foundations' /><meta property='article:tag' content='Cryptography' /><meta property='article:published_time' content='2025-09-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-09-11T00:00:00&#43;00:00'/><meta property='og:image' content='https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg' />
+<meta name="twitter:title" content="NTT Study Notes">
+<meta name="twitter:description" content="This is a subtitle"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/en/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/nazime_hu_87c03dc0523f28a2.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en">❤️M.H.</a></h1>
+            <h2 class="site-description">A Quiet Little Station</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://Chang-mh.github.io/en/" selected>English</option>
+                                
+                                    <option value="https://Chang-mh.github.io/" >中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#the-transformation">The Transformation</a>
+      <ol>
+        <li><a href="#primitive-root">Primitive Root</a></li>
+        <li><a href="#forward-transform-ntt">Forward Transform (NTT)</a></li>
+        <li><a href="#inverse-transform-intt">Inverse Transform (INTT)</a></li>
+        <li><a href="#modulus-p">Modulus $p$</a></li>
+      </ol>
+    </li>
+    <li><a href="#summary">Summary</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/en/p/ntt/">
+                <img src="/p/ntt/helena-hertz-wWZzXlDpMog-unsplash_hu_e5aaa5f0b7bd07e9.jpg"
+                        srcset="/p/ntt/helena-hertz-wWZzXlDpMog-unsplash_hu_e5aaa5f0b7bd07e9.jpg 800w, /p/ntt/helena-hertz-wWZzXlDpMog-unsplash_hu_c99ba9c80ceee4b3.jpg 1600w"
+                        width="800" 
+                        height="600" 
+                        loading="lazy"
+                        alt="Featured image of post NTT Study Notes" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/en/categories/study/" >
+                Study
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/ntt/">NTT Study Notes</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            This is a subtitle
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 11, 2025</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+        <footer class="article-translations">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+            <div>
+                
+                    <a href="https://Chang-mh.github.io/p/ntt/" class="link">中文</a>
+                
+            </div>
+        </footer>
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="introduction">Introduction
+</h1><p>In a previous article, we delved into the intricacies of the FFT algorithm. However, it has an inherent drawback: it operates in the complex number domain. The real and imaginary parts of the complex roots of unity are sine and cosine functions, respectively, involving extensive floating-point calculations. This results in significant computational load, and floating-point arithmetic can also introduce substantial errors.</p>
+<p>So, can we change the operands to integers? The Number Theoretic Transform (NTT) emerged to answer this call.</p>
+<h1 id="the-transformation">The Transformation
+</h1><p>The divide-and-conquer approach used by NTT is entirely identical to that used by FFT. This means NTT can be derived by making simple modifications to the FFT foundation.</p>
+<h2 id="primitive-root">Primitive Root
+</h2><p>For a prime number $p$, its primitive root $g$ is an integer such that the sequence $g^1, g^2, \ldots, g^{p-1} \mod p$ generates the entire multiplicative group $Z_p^*$ (i.e., all elements in ${1, 2, \ldots, p-1}$).</p>
+<p>In other words, the powers of $g$ modulo $p$ are all distinct and cover all integers from $1$ to $p-1$.</p>
+<p>For example, the prime number $p = 7$.</p>
+<ul>
+<li>Check $g = 3$: $3^1 \equiv 3$, $3^2 \equiv 2$, $3^3 \equiv 6$, $3^4 \equiv 4$, $3^5 \equiv 5$, $3^6 \equiv 1 \mod 7$.</li>
+<li>The sequence is ${3, 2, 6, 4, 5, 1}$, covering all numbers $1-6$. Thus, $3$ is a primitive root modulo $7$.</li>
+</ul>
+<p>Analogous to the complex roots of unity, we can visualize the values of the primitive root as points on a circle. However, this circle has only a finite number of points, each representing a value in the residue system modulo $p$.</p>
+<p>We define $\omega_n \equiv g^{(p-1)/n} \mod p$. This $\omega_n$ defined in this way satisfies the key properties of an $n$-th root of unity:</p>
+<ol>
+<li>$\omega_n^n \equiv (g^{(p-1)/n})^n \equiv g^{p-1} \equiv 1 \mod p$ (Fermat&rsquo;s Little Theorem)</li>
+<li>$\omega_n^{n/2} \equiv g^{(p-1)/2} \equiv -1 \mod p$ (Because $g^{(p-1)/2}$ is a square root of $1$, which can only be $\pm 1$ modulo $p$. By the definition of a primitive root, it cannot be $1$, so it must be $-1$.)</li>
+<li>The sequence $\omega_n^0, \omega_n^1, \ldots, \omega_n^{n-1}$ consists of distinct elements.</li>
+</ol>
+<p>Based on these three points, the <strong>Cancellation Lemma</strong> and the <strong>Halving Lemma</strong> crucial to FFT also hold:</p>
+<ul>
+<li><strong>Cancellation Lemma</strong>: $\omega_{dn}^{dk} = g^{\frac{p-1}{dn} \cdot dk} = g^{\frac{p-1}{n} \cdot k} = \omega_n^k$</li>
+<li><strong>Halving Lemma</strong>: $\omega_n^{k + n/2} = \omega_n^k \cdot \omega_n^{n/2} = \omega_n^k \cdot (-1) = -\omega_n^k$</li>
+</ul>
+<p>Perfect! We now have an element $\omega_n$ within the integer modulo $p$ domain that perfectly substitutes the complex root of unity.</p>
+<p>With $\omega_n$, the implementation of NTT becomes almost identical to FFT. The process remains: <strong>Evaluation (NTT) → Pointwise Multiplication → Interpolation (Inverse NTT)</strong>.</p>
+<p>Assume we have a polynomial $A(x)$ with coefficients modulo $p$ and a degree less than $n$ (where $n$ is a power of $2$, and $n \mid p-1$).</p>
+<h2 id="forward-transform-ntt">Forward Transform (NTT)
+</h2><p>The recursive divide-and-conquer process is exactly the same as FFT:</p>
+<ol>
+<li>Split the polynomial into two smaller polynomials based on even and odd indices: $A^{[0]}(x)$ and $A^{[1]}(x)$.</li>
+<li>Recursively compute $\operatorname{NTT}(A^{[0]})$ and $\operatorname{NTT}(A^{[1]})$.</li>
+<li>Combine the results:
+For $k = 0$ to $n/2 - 1$:
+$\operatorname{NTT}(A)[k] = (\operatorname{NTT}(A^{[0]})[k] + \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$
+$\operatorname{NTT}(A)[k + n/2] = (\operatorname{NTT}(A^{[0]})[k] - \omega_n^k \cdot \operatorname{NTT}(A^{[1]})[k]) \mod p$</li>
+</ol>
+<p><strong>Note</strong>: The addition, multiplication, and modulo operations here are all performed within the integer modulo $p$ domain. There are no floating-point numbers and no precision errors!</p>
+<h2 id="inverse-transform-intt">Inverse Transform (INTT)
+</h2><p>The differences between the inverse NTT (INTT) and NTT are only:</p>
+<ol>
+<li>Use $\omega_n^{-1} \mod p$ (the modular multiplicative inverse of $\omega_n$) instead of $\omega_n$.</li>
+<li>Multiply the final result by $n^{-1} \mod p$ (the modular multiplicative inverse of $n$).</li>
+</ol>
+<p>The formula for INTT is:
+$\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \omega_n^{-kj} \right) \mod p$</p>
+<p>In practical code, <strong>iterative (non-recursive)</strong> butterfly operations are usually used to implement NTT/INTT for higher efficiency.</p>
+<h2 id="modulus-p">Modulus $p$
+</h2><p>NTT has a crucial constraint: <strong>the transformation length $n$ must be a divisor of $p-1$</strong>. This is because we need $\omega_n = g^{(p-1)/n}$ to be an integer, which requires that $n$ divides $p-1$.</p>
+<p>The common practice is to choose primes of special forms where $p-1$ contains a very large power-of-$2$ factor.</p>
+<p><strong>Common NTT Moduli</strong>:</p>
+<p>$p = 469762049 = 7 \cdot 2^{26} + 1$, $g = 3$</p>
+<p>$p = 998244353 = 7\cdot17 \cdot 2^{23} + 1$, $g = 3$ (Note: The original factorization $119 \cdot 2^{23} + 1$ is also correct as 119=7*17)</p>
+<p>$p = 1004535809 = 479 \cdot 2^{21} + 1$, $g = 3$</p>
+<p>If the values in the problem are very large, <strong>arbitrary modulus NTT</strong> (which combines results from multiple NTTs using different moduli via the Chinese Remainder Theorem) might be necessary.</p>
+<h1 id="summary">Summary
+</h1><p>Assuming we want to compute $A(x) \times B(x) \mod p$, with coefficients in $[0, p-1]$.</p>
+<ol>
+<li><strong>Zero-padding</strong>: Determine the length $N \geq \operatorname{len}(A) + \operatorname{len}(B) - 1$, ensuring $N$ is a power of $2$ and that $N \mid (p-1)$.</li>
+<li><strong>Evaluation (NTT)</strong>: Compute $\vec{A&rsquo;} = \operatorname{NTT}(\vec{A})$, $\vec{B&rsquo;} = \operatorname{NTT}(\vec{B})$.</li>
+<li><strong>Pointwise Multiplication</strong>: Compute $\vec{C&rsquo;}[k] = \vec{A&rsquo;}[k] \cdot \vec{B&rsquo;}[k] \mod p$ for $k=0,1,\ldots,N-1$.</li>
+<li><strong>Interpolation (INTT)</strong>: Compute $\vec{C} = \operatorname{INTT}(\vec{C&rsquo;})$. The result $\vec{C}$ is the coefficient vector of $A(x) \times B(x) \mod p$.</li>
+</ol>
+<p>The Number Theoretic Transform (NTT) perfectly adapts the ideas of FFT to the integer modulo domain. By substituting the <strong>primitive root</strong> for the <strong>complex root of unity</strong> and <strong>modular arithmetic</strong> for complex arithmetic, it retains the $O(n \log n)$ computational efficiency while providing absolutely accurate results and faster computation speed. This makes it the algorithm of choice for handling large integer multiplication and polynomial convolution in competitive programming and engineering applications.</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/mathematical-foundations/">Mathematical Foundations</a>
+        
+            <a href="/en/tags/cryptography/">Cryptography</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>❤️M.H. All rights reserved</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/fft/">
+        
+        
+            <div class="article-image">
+                <img src="/p/fft/pexels-lum3n-44775-167682.3ce5325da6e379236b082807f37e1f4c_hu_bd8b2abc46d34762.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post FFT Study Notes"
+                        data-key="fft" 
+                        data-hash="md5-POUyXabjeSNrCCgH834fTA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">FFT Study Notes</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"avatar":false,"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo"],"lang":"zh-CN","locale":{"admin":"管理员","placeholder":"留下你的评论..."},"pageview":true,"requiredMeta":["name"],"serverURL":"https://mh-lhyduhkry-chang-mhs-projects.vercel.app"});
+</script>
+
+    
+
+    <footer class="footer">
+    <div class="footer__inner">        
+        <div class="copyright">
+            
+                <span>© 2025 ❤️M.H.</span>
+                <span class="footer-divider">·</span>
+                <span>Write with heart, share with mind</span>
+            
+        </div>
+    </div>
+</footer>
+
+<style>
+.footer {
+    margin-top: 4rem;
+    padding: 2rem 0 1.5rem;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.footer-divider {
+    margin: 0 0.5rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+    .footer-top-border {
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            var(--border-color-dark) 20%, 
+            var(--border-color-dark) 80%, 
+            transparent 100%);
+    }
+}
+</style>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
