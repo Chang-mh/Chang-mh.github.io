@@ -208,6 +208,21 @@
             </div>
         </div>
         
+
+        
+        <h2 class="section-title" style="margin-top: 2rem;">Tags</h2>
+        <div class="tags-cloud" style="margin: 1rem 0;">
+            
+                <a href="/en/tags/cryptography/" class="tag-item" style="display: inline-block; margin: 0.3rem; padding: 0.6rem 1rem; background: var(--card-background); border-radius: 15px; color: var(--body-text-color); text-decoration: none; border: 1px solid var(--border-color); transition: all 0.2s ease;">
+                    Cryptography <span style="font-size: 0.7em; opacity: 0.7;">(1)</span>
+                </a>
+            
+                <a href="/en/tags/mathematical-foundations/" class="tag-item" style="display: inline-block; margin: 0.3rem; padding: 0.6rem 1rem; background: var(--card-background); border-radius: 15px; color: var(--body-text-color); text-decoration: none; border: 1px solid var(--border-color); transition: all 0.2s ease;">
+                    Mathematical Foundations <span style="font-size: 0.7em; opacity: 0.7;">(2)</span>
+                </a>
+            
+        </div>
+        
     </header>
 
     
@@ -296,58 +311,117 @@
     margin-bottom: 1.5rem;
     border-radius: 1px;
     opacity: 0.7;
-    width: fit-content;  
     margin-left: auto;
     margin-right: auto;
-    min-width: 200px;  
-    max-width: 80%;  
+    transition: width 0.3s ease;  
 }
 
 .copyright {
     text-align: center;
     font-size: 1.1rem;
-    color: var(--text-muted);
     line-height: 1.6;
-    display: inline-block;  
+    display: inline-block;
     max-width: 100%;
+}
+
+.footer-divider {
+    margin: 0 0.5rem;
+    opacity: 0.8;
 }
 
 .footer__inner {
     display: flex;
     flex-direction: column;
-    align-items: center;  
-}
-
-.footer-divider {
-    margin: 0 0.5rem;
-    color: var(--text-muted);
-    opacity: 0.6;
+    align-items: center;
 }
 
  
+ 
+ 
+.copyright {
+    color: #333333;  
+}
+
+.footer-divider {
+    color: #666666;  
+}
+
+ 
+ 
+ 
 @media (prefers-color-scheme: dark) {
-    .footer-gradient-line {
-        opacity: 0.8;  
+    .footer .copyright,
+    .footer .footer-divider {
+        color: #e0e0e0 !important;
     }
+}
+
+[data-scheme="dark"] .footer .copyright,
+[data-scheme="dark"] .footer .footer-divider,
+.dark .footer .copyright,
+.dark .footer .footer-divider,
+[data-theme="dark"] .footer .copyright,
+[data-theme="dark"] .footer .footer-divider,
+body.dark .footer .copyright,
+body.dark .footer .footer-divider {
+    color: #e0e0e0 !important;
+}
+
+[data-scheme="light"] .footer .copyright,
+[data-scheme="light"] .footer .footer-divider,
+.light .footer .copyright,
+.light .footer .footer-divider,
+[data-theme="light"] .footer .copyright,
+[data-theme="light"] .footer .footer-divider,
+body.light .footer .copyright,
+body.light .footer .footer-divider {
+    color: #333333 !important;
 }
 
  
 @media (max-width: 768px) {
-    .footer-gradient-line {
-        width: 80%;  
-        min-width: 150px;
-    }
-    
     .copyright {
-        font-size: 1rem;  
+        font-size: 1rem;
     }
-}
-
- 
-.footer-gradient-line.accurate {
-    width: var(--text-width, 300px);  
 }
 </style>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    function adjustLineWidth() {
+        const copyright = document.querySelector('.copyright');
+        const gradientLine = document.querySelector('.footer-gradient-line');
+        
+        if (copyright && gradientLine) {
+            
+            const textWidth = copyright.offsetWidth;
+            
+            
+            const lineWidth = textWidth * 1.2;
+            
+            
+            gradientLine.style.width = Math.min(Math.max(lineWidth, 200), window.innerWidth * 0.8) + 'px';
+        }
+    }
+    
+    
+    adjustLineWidth();
+    
+    
+    window.addEventListener('resize', adjustLineWidth);
+    
+    
+    if (typeof MutationObserver !== 'undefined') {
+        const observer = new MutationObserver(adjustLineWidth);
+        observer.observe(document.querySelector('.copyright'), {
+            childList: true,
+            subtree: true,
+            characterData: true
+        });
+    }
+});
+</script>
 
             </main>
         </div>
