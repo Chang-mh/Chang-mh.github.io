@@ -521,7 +521,10 @@ $\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \om
     
 
     <footer class="footer">
-    <div class="footer__inner">        
+    <div class="footer__inner">
+        
+        <div class="footer-gradient-line"></div>
+        
         <div class="copyright">
             
                 <span>© 2025 ❤️M.H.</span>
@@ -534,8 +537,26 @@ $\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \om
 
 <style>
 .footer {
-    margin-top: 4rem;
+    margin-top: 2rem;
     padding: 2rem 0 1.5rem;
+}
+
+.footer-gradient-line {
+    height: 2px;
+    background: linear-gradient(90deg, 
+        #ff6b6b, 
+        #4ecdc4, 
+        #45b7d1, 
+        #96ceb4, 
+        #ffeaa7);
+    margin-bottom: 1.5rem;
+    border-radius: 1px;
+    opacity: 0.7;
+    width: fit-content;  
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 200px;  
+    max-width: 80%;  
 }
 
 .copyright {
@@ -543,6 +564,14 @@ $\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \om
     font-size: 1.1rem;
     color: var(--text-muted);
     line-height: 1.6;
+    display: inline-block;  
+    max-width: 100%;
+}
+
+.footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
 }
 
 .footer-divider {
@@ -553,13 +582,26 @@ $\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \om
 
  
 @media (prefers-color-scheme: dark) {
-    .footer-top-border {
-        background: linear-gradient(90deg, 
-            transparent 0%, 
-            var(--border-color-dark) 20%, 
-            var(--border-color-dark) 80%, 
-            transparent 100%);
+    .footer-gradient-line {
+        opacity: 0.8;  
     }
+}
+
+ 
+@media (max-width: 768px) {
+    .footer-gradient-line {
+        width: 80%;  
+        min-width: 150px;
+    }
+    
+    .copyright {
+        font-size: 1rem;  
+    }
+}
+
+ 
+.footer-gradient-line.accurate {
+    width: var(--text-width, 300px);  
 }
 </style>
 

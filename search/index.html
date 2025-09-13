@@ -12,13 +12,11 @@
 <meta property='og:site_name' content='❤️M.H.'>
 <meta property='og:type' content='article'><meta property='article:section' content='' />
 <meta name="twitter:title" content="搜索">
-<meta name="twitter:description" content="">
+<meta name="twitter:description" content=""><link rel="alternate" type="application/json" href="https://Chang-mh.github.io/search/index.json">
     <link rel="shortcut icon" href="/favicon.ico" />
-
+<link rel="preload" href="/search/index.json" as="fetch" crossorigin="anonymous">
     </head>
-    <body class="
-    article-page
-    ">
+    <body class="template-search">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -188,156 +186,39 @@
     </ol>
 </aside>
 
-    
-
             <main class="main full-width">
-    <article class="main-article">
-    <header class="article-header">
+<form action="/search/" class="search-form"data-json="/search/index.json">
+    <p>
+        <label>搜索</label>
+        <input name="keyword" placeholder="输入关键词..." />
+    </p>
 
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/search/">搜索</a>
-        </h2>
-    
-        
-    </div>
-
-    
-    
-    
-    
-    <footer class="article-time">
-        
-
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <button title="搜索">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
 </svg>
 
 
 
-                <time class="article-time--reading">
-                    阅读时长: 0 分钟
-                </time>
-            </div>
-        
-    </footer>
-    
+    </button>
+</form>
 
-    
-        <footer class="article-translations">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M4 5h7" />
-  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
-  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
-  <path d="M12 20l4 -9l4 9" />
-  <path d="M19.1 18h-6.2" />
-</svg>
-
-
-
-            <div>
-                
-                    <a href="https://Chang-mh.github.io/en/search/" class="link">English</a>
-                
-            </div>
-        </footer>
-    
+<div class="search-result">
+    <h3 class="search-result--title section-title"></h3>
+    <div class="search-result--list article-list--compact"></div>
 </div>
 
-</header>
+<script>
+    window.searchResultTitleTemplate = "#PAGES_COUNT 个结果 （用时 #TIME_SECONDS 秒）"
+</script><script type="text/javascript" src="/ts/search.js" defer></script>
 
-    <section class="article-content">
-    
-    
-    
-</section>
-
-
-    <footer class="article-footer">
-    
-
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
-</svg>
-
-
-
-        <span>❤️M.H. All rights reserved</span>
-    </section>
-    </footer>
-
-
-    
-        <link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
-            ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
-                defer
-                >
-            </script><script>
-    window.addEventListener("DOMContentLoaded", () => {
-	const mainArticleElement = document.querySelector(".main-article");
-        renderMathInElement(mainArticleElement, {
-            delimiters: [
-                { left: "$$", right: "$$", display: true },
-                { left: "$", right: "$", display: false },
-                { left: "\\(", right: "\\)", display: false },
-                { left: "\\[", right: "\\]", display: true }
-            ],
-            ignoredClasses: ["gist"]
-        });})
-</script>
-
-    
-</article>
-
-    
-
-    
-
-     
-    
+<footer class="footer">
+    <div class="footer__inner">
         
-    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
-<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
-<div id="waline" class="waline-container"></div>
-<style>
-    .waline-container {
-        background-color: var(--card-background);
-        border-radius: var(--card-border-radius);
-        box-shadow: var(--shadow-l1);
-        padding: var(--card-padding);
-        --waline-font-size: var(--article-font-size);
-    }
-    .waline-container .wl-count {
-        color: var(--card-text-color-main);
-    }
-</style><script>
-    
-    Waline.init({"avatar":false,"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo"],"lang":"zh-CN","locale":{"admin":"管理员","placeholder":"留下你的评论..."},"pageview":true,"requiredMeta":["name"],"serverURL":"https://mh-lhyduhkry-chang-mhs-projects.vercel.app"});
-</script>
-
-    
-
-    <footer class="footer">
-    <div class="footer__inner">        
+        <div class="footer-gradient-line"></div>
+        
         <div class="copyright">
             
                 <span>© 2025 ❤️M.H.</span>
@@ -350,8 +231,26 @@
 
 <style>
 .footer {
-    margin-top: 4rem;
+    margin-top: 2rem;
     padding: 2rem 0 1.5rem;
+}
+
+.footer-gradient-line {
+    height: 2px;
+    background: linear-gradient(90deg, 
+        #ff6b6b, 
+        #4ecdc4, 
+        #45b7d1, 
+        #96ceb4, 
+        #ffeaa7);
+    margin-bottom: 1.5rem;
+    border-radius: 1px;
+    opacity: 0.7;
+    width: fit-content;  
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 200px;  
+    max-width: 80%;  
 }
 
 .copyright {
@@ -359,6 +258,14 @@
     font-size: 1.1rem;
     color: var(--text-muted);
     line-height: 1.6;
+    display: inline-block;  
+    max-width: 100%;
+}
+
+.footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
 }
 
 .footer-divider {
@@ -369,93 +276,28 @@
 
  
 @media (prefers-color-scheme: dark) {
-    .footer-top-border {
-        background: linear-gradient(90deg, 
-            transparent 0%, 
-            var(--border-color-dark) 20%, 
-            var(--border-color-dark) 80%, 
-            transparent 100%);
+    .footer-gradient-line {
+        opacity: 0.8;  
     }
 }
+
+ 
+@media (max-width: 768px) {
+    .footer-gradient-line {
+        width: 80%;  
+        min-width: 150px;
+    }
+    
+    .copyright {
+        font-size: 1rem;  
+    }
+}
+
+ 
+.footer-gradient-line.accurate {
+    width: var(--text-width, 300px);  
+}
 </style>
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-
-        
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
-            >
 
             </main>
         </div>
