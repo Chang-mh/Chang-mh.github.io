@@ -2,18 +2,40 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>学习 on ❤️M.H.</title>
-        <link>https://Chang-mh.github.io/categories/%E5%AD%A6%E4%B9%A0/</link>
+        <link>http://localhost:1313/categories/%E5%AD%A6%E4%B9%A0/</link>
         <description>Recent content in 学习 on ❤️M.H.</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>M.H.</copyright>
-        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://Chang-mh.github.io/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 15 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>MPC学习笔记</title>
+        <link>http://localhost:1313/p/mpc/</link>
+        <pubDate>Mon, 15 Sep 2025 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/p/mpc/</guid>
+        <description>&lt;img src="http://localhost:1313/p/mpc/ECFBFD5A01583768E301180AF31172B5.png" alt="Featured image of post MPC学习笔记" /&gt;&lt;h1 id=&#34;引入&#34;&gt;引入
+&lt;/h1&gt;&lt;p&gt;1982年，中国计算机科学家、2000年图灵奖获得者&lt;a class=&#34;link&#34; href=&#34;https://baike.baidu.com/item/%E5%A7%9A%E6%9C%9F%E6%99%BA/10170340?fr=aladdin&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;姚期智&lt;/a&gt;教授在论文&lt;a class=&#34;link&#34; href=&#34;https://ieeexplore.ieee.org/document/4568388&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;《Protocols for secure computations》&lt;/a&gt;中提出了著名的姚氏百万富翁问题，开创了密码学研究的新领域：安全多方计算(Secure Multi-party Computation)。&lt;/p&gt;
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述
+&lt;/h2&gt;&lt;p&gt;有两个百万富翁，Alice 和 Bob。他们想知道谁更富有，但又不愿意向对方透露自己财富的具体数额。换句话说，他们希望在不泄露各自真实财富值的前提下，比较出谁的钱更多。如何在不借助第三方的情况下，让他们知道他们之间谁更有钱？&lt;/p&gt;
+&lt;h2 id=&#34;思路&#34;&gt;思路
+&lt;/h2&gt;&lt;p&gt;我们假设Alice拥有的财富值为 $a$；Bob拥有的财富值为 $b$。假设财富值在 [1, 10] 范围内，这里为简化设为10 。
+假设有10个宝箱，编号为1到10，Alice可以打开这10个箱子，而Bob不能。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;第一步：Alice找到编号为 $i$ 的箱子，并将编号为1到 $i-1$ 的箱子里都放个纸条“no”，编号为 $i$ 到10的箱子里放个纸条“yes”，然后锁上箱子。&lt;/li&gt;
+&lt;li&gt;第二步：Bob根据自己的资产选择编号为的箱子，并把这个箱子的编号撕掉并返回给Alice。（撕掉编号是为了让Alice也不知道Bob到底选了哪个箱子）&lt;/li&gt;
+&lt;li&gt;第三步：Alice把Bob发的箱子打开，看一下里面的纸条，如果是&amp;quot;no&amp;quot;就说明 $j&amp;lt;i$ ，&amp;ldquo;yes&amp;quot;就说明 $i≤j$。由此可以在互不知道对方财产的前提下，比较二人的财富。&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>NTT学习笔记</title>
-        <link>https://Chang-mh.github.io/p/ntt/</link>
+        <link>http://localhost:1313/p/ntt/</link>
         <pubDate>Thu, 11 Sep 2025 00:00:00 +0000</pubDate>
         
-        <guid>https://Chang-mh.github.io/p/ntt/</guid>
-        <description>&lt;img src="https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT学习笔记" /&gt;&lt;h1 id=&#34;引言&#34;&gt;引言
+        <guid>http://localhost:1313/p/ntt/</guid>
+        <description>&lt;img src="http://localhost:1313/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT学习笔记" /&gt;&lt;h1 id=&#34;引言&#34;&gt;引言
 &lt;/h1&gt;&lt;p&gt;在之前的一篇文章里，我们详细了解了精妙的FFT算法。但它有一个与生俱来的缺点：在复数域上。单位复根的实部和虚部分别是一个正弦及余弦函数，有大量浮点数计算，计算量很大且浮点数运算也会产生较大的误差。&lt;/p&gt;
 &lt;p&gt;所以我们可不可以把操作对象变成整数呢？快速数论变换（NTT）应运而生。&lt;/p&gt;
 &lt;h1 id=&#34;变换&#34;&gt;变换
@@ -88,11 +110,11 @@ $\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \om
         </item>
         <item>
         <title>FFT学习笔记</title>
-        <link>https://Chang-mh.github.io/p/fft/</link>
+        <link>http://localhost:1313/p/fft/</link>
         <pubDate>Tue, 09 Sep 2025 00:00:00 +0000</pubDate>
         
-        <guid>https://Chang-mh.github.io/p/fft/</guid>
-        <description>&lt;img src="https://Chang-mh.github.io/p/fft/pexels-lum3n-44775-167682.jpg" alt="Featured image of post FFT学习笔记" /&gt;&lt;h1 id=&#34;引入&#34;&gt;引入
+        <guid>http://localhost:1313/p/fft/</guid>
+        <description>&lt;img src="http://localhost:1313/p/fft/pexels-lum3n-44775-167682.jpg" alt="Featured image of post FFT学习笔记" /&gt;&lt;h1 id=&#34;引入&#34;&gt;引入
 &lt;/h1&gt;&lt;p&gt;假设我们有两个多项式：&lt;/p&gt;
 &lt;p&gt;\( A(x) = a_0 + a_1x + a_2x^2 + ... + a_{n-1}x^{n-1} \)&lt;/p&gt;
 &lt;p&gt;\( B(x) = b_0 + b_1x + b_2x^2 + ... + b_{m-1}x^{m-1} \)&lt;/p&gt;

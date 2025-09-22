@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>数学基础 on ❤️M.H.</title>
-        <link>https://Chang-mh.github.io/tags/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/</link>
+        <link>http://localhost:1313/tags/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/</link>
         <description>Recent content in 数学基础 on ❤️M.H.</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>M.H.</copyright>
-        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://Chang-mh.github.io/tags/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>NTT学习笔记</title>
-        <link>https://Chang-mh.github.io/p/ntt/</link>
+        <link>http://localhost:1313/p/ntt/</link>
         <pubDate>Thu, 11 Sep 2025 00:00:00 +0000</pubDate>
         
-        <guid>https://Chang-mh.github.io/p/ntt/</guid>
-        <description>&lt;img src="https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT学习笔记" /&gt;&lt;h1 id=&#34;引言&#34;&gt;引言
+        <guid>http://localhost:1313/p/ntt/</guid>
+        <description>&lt;img src="http://localhost:1313/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT学习笔记" /&gt;&lt;h1 id=&#34;引言&#34;&gt;引言
 &lt;/h1&gt;&lt;p&gt;在之前的一篇文章里，我们详细了解了精妙的FFT算法。但它有一个与生俱来的缺点：在复数域上。单位复根的实部和虚部分别是一个正弦及余弦函数，有大量浮点数计算，计算量很大且浮点数运算也会产生较大的误差。&lt;/p&gt;
 &lt;p&gt;所以我们可不可以把操作对象变成整数呢？快速数论变换（NTT）应运而生。&lt;/p&gt;
 &lt;h1 id=&#34;变换&#34;&gt;变换
@@ -88,11 +88,11 @@ $\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \om
         </item>
         <item>
         <title>FFT学习笔记</title>
-        <link>https://Chang-mh.github.io/p/fft/</link>
+        <link>http://localhost:1313/p/fft/</link>
         <pubDate>Tue, 09 Sep 2025 00:00:00 +0000</pubDate>
         
-        <guid>https://Chang-mh.github.io/p/fft/</guid>
-        <description>&lt;img src="https://Chang-mh.github.io/p/fft/pexels-lum3n-44775-167682.jpg" alt="Featured image of post FFT学习笔记" /&gt;&lt;h1 id=&#34;引入&#34;&gt;引入
+        <guid>http://localhost:1313/p/fft/</guid>
+        <description>&lt;img src="http://localhost:1313/p/fft/pexels-lum3n-44775-167682.jpg" alt="Featured image of post FFT学习笔记" /&gt;&lt;h1 id=&#34;引入&#34;&gt;引入
 &lt;/h1&gt;&lt;p&gt;假设我们有两个多项式：&lt;/p&gt;
 &lt;p&gt;\( A(x) = a_0 + a_1x + a_2x^2 + ... + a_{n-1}x^{n-1} \)&lt;/p&gt;
 &lt;p&gt;\( B(x) = b_0 + b_1x + b_2x^2 + ... + b_{m-1}x^{m-1} \)&lt;/p&gt;

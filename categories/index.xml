@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Categories on ❤️M.H.</title>
-        <link>https://Chang-mh.github.io/categories/</link>
+        <link>http://localhost:1313/categories/</link>
         <description>Recent content in Categories on ❤️M.H.</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>M.H.</copyright>
-        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://Chang-mh.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 15 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>学习</title>
-        <link>https://Chang-mh.github.io/categories/%E5%AD%A6%E4%B9%A0/</link>
-        <pubDate>Thu, 11 Sep 2025 00:00:00 +0000</pubDate>
+        <link>http://localhost:1313/categories/%E5%AD%A6%E4%B9%A0/</link>
+        <pubDate>Mon, 15 Sep 2025 00:00:00 +0000</pubDate>
         
-        <guid>https://Chang-mh.github.io/categories/%E5%AD%A6%E4%B9%A0/</guid>
-        <description>&lt;img src="https://Chang-mh.github.io/categories/%E5%AD%A6%E4%B9%A0/2025-09-13%20142652.png" alt="Featured image of post 学习" /&gt;</description>
+        <guid>http://localhost:1313/categories/%E5%AD%A6%E4%B9%A0/</guid>
+        <description>&lt;img src="http://localhost:1313/categories/%E5%AD%A6%E4%B9%A0/2025-09-13%20142652.png" alt="Featured image of post 学习" /&gt;</description>
         </item>
         <item>
         <title>写作</title>
-        <link>https://Chang-mh.github.io/categories/%E5%86%99%E4%BD%9C/</link>
+        <link>http://localhost:1313/categories/%E5%86%99%E4%BD%9C/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Chang-mh.github.io/categories/%E5%86%99%E4%BD%9C/</guid>
-        <description>&lt;img src="https://Chang-mh.github.io/categories/%E5%86%99%E4%BD%9C/1687828512585698.png" alt="Featured image of post 写作" /&gt;</description>
+        <guid>http://localhost:1313/categories/%E5%86%99%E4%BD%9C/</guid>
+        <description>&lt;img src="http://localhost:1313/categories/%E5%86%99%E4%BD%9C/1687828512585698.png" alt="Featured image of post 写作" /&gt;</description>
         </item>
         
     </channel>

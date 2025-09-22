@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Mathematical Foundations on ❤️M.H.</title>
-        <link>https://Chang-mh.github.io/en/tags/mathematical-foundations/</link>
+        <link>http://localhost:1313/en/tags/mathematical-foundations/</link>
         <description>Recent content in Mathematical Foundations on ❤️M.H.</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>M.H.</copyright>
-        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://Chang-mh.github.io/en/tags/mathematical-foundations/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 11 Sep 2025 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/en/tags/mathematical-foundations/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>NTT Study Notes</title>
-        <link>https://Chang-mh.github.io/en/p/ntt/</link>
+        <link>http://localhost:1313/en/p/ntt/</link>
         <pubDate>Thu, 11 Sep 2025 00:00:00 +0000</pubDate>
         
-        <guid>https://Chang-mh.github.io/en/p/ntt/</guid>
-        <description>&lt;img src="https://Chang-mh.github.io/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT Study Notes" /&gt;&lt;h1 id=&#34;introduction&#34;&gt;Introduction
+        <guid>http://localhost:1313/en/p/ntt/</guid>
+        <description>&lt;img src="http://localhost:1313/p/ntt/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post NTT Study Notes" /&gt;&lt;h1 id=&#34;introduction&#34;&gt;Introduction
 &lt;/h1&gt;&lt;p&gt;In a previous article, we delved into the intricacies of the FFT algorithm. However, it has an inherent drawback: it operates in the complex number domain. The real and imaginary parts of the complex roots of unity are sine and cosine functions, respectively, involving extensive floating-point calculations. This results in significant computational load, and floating-point arithmetic can also introduce substantial errors.&lt;/p&gt;
 &lt;p&gt;So, can we change the operands to integers? The Number Theoretic Transform (NTT) emerged to answer this call.&lt;/p&gt;
 &lt;h1 id=&#34;the-transformation&#34;&gt;The Transformation
@@ -82,11 +82,11 @@ $\operatorname{INTT}(A)[k] = \left( n^{-1} \cdot \sum_{j=0}^{n-1} A[j] \cdot \om
         </item>
         <item>
         <title>FFT Study Notes</title>
-        <link>https://Chang-mh.github.io/en/p/fft/</link>
+        <link>http://localhost:1313/en/p/fft/</link>
         <pubDate>Tue, 09 Sep 2025 00:00:00 +0000</pubDate>
         
-        <guid>https://Chang-mh.github.io/en/p/fft/</guid>
-        <description>&lt;img src="https://Chang-mh.github.io/p/fft/pexels-lum3n-44775-167682.jpg" alt="Featured image of post FFT Study Notes" /&gt;&lt;h1 id=&#34;introduction&#34;&gt;Introduction
+        <guid>http://localhost:1313/en/p/fft/</guid>
+        <description>&lt;img src="http://localhost:1313/p/fft/pexels-lum3n-44775-167682.jpg" alt="Featured image of post FFT Study Notes" /&gt;&lt;h1 id=&#34;introduction&#34;&gt;Introduction
 &lt;/h1&gt;&lt;p&gt;Suppose we have two polynomials:&lt;/p&gt;
 &lt;p&gt;\( A(x) = a_0 + a_1x + a_2x^2 + ... + a_{n-1}x^{n-1} \)&lt;/p&gt;
 &lt;p&gt;\( B(x) = b_0 + b_1x + b_2x^2 + ... + b_{m-1}x^{m-1} \)&lt;/p&gt;
